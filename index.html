@@ -6,30 +6,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do..</title>
-
-
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/5f90c49f7d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/normalize.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
 
 </head>
 
 <body>
     <header>
-        <h1>To-Do..</h1>
-        <button>Menu</button>
+        <h1><i class="fas fa-check-circle"></i>To-Do..</h1>
+        <button class="menu-btn"><i class="fas fa-grip-horizontal"></i></button>
     </header>
     <div class="main-container">
-        <div>To Do List</div>
-        <div class="menu">
-            <ul>
-                <li>Home</li>
-                <li>Today</li>
-                <li>Week</li>
-                <li>Lists
-                    <ul>
-                    </ul>
-                </li>
-            </ul>
+        <ul class="menu">
+            <li><i class="fas fa-globe"></i>View All</li>
+            <li><i class="fas fa-calendar-day"></i>Today</li>
+            <li><i class="fas fa-calendar-week"></i>Week</li>
+            <li class="list-label">Lists
+                <ul>
+                    <li class="list"><i class="fas fa-list-alt"></i>Work</li>
+                </ul>
+            </li>
+            <li><i class="fas fa-plus"></i></i>Add List</li>
+        </ul>
+        <div class="todo list">
+            <h2>Chores</h2>
+            <h2>Due Date</h2>
+            <li><span class="task">Laundry</span><span class="due-date">9/20/2020</span></li>
+            <li><span class="task">Wash Dishes</span><span class="due-date">9/21/2020</span></li>
+            <li><span class="task">Take out Trash</span><span class="due-date">9/21/2020</span></li>
+            <li><span class="task"></span><span class="due-date">9/20/2020</span></li>
+            <li><span class="task">Laundry</span><span class="due-date">9/20/2020</span></li>
         </div>
+
     </div>
     <footer>
         <span class="copyright">Copyright © 2021 mattdimicelli</span>
@@ -37,6 +46,7 @@
                 alt="Github logo" /></a>
     </footer>
     </div>
+    <script src="scripts/main.js"></script>
 </body>
 
 </html>

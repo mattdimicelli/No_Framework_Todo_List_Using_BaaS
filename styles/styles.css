@@ -1,0 +1,116 @@
+/* My styles */
+
+:root {
+	--main-dark-color: #333;
+	--secondary-dark-color: #444;
+	--main-light-color: #eee;
+	--secondary-light-color: #ddd;
+	--middle-color: hsl(54, 1%, 70%);
+}
+
+h1 {
+	font-size: 3rem;
+}
+
+div.main-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+footer {
+	width: 100%;
+	background-color: var(--main-dark-color);
+	height: 5vh;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+span.copyright {
+	margin-right: 0.7rem;
+}
+
+header {
+	width: 100%;
+	background-color: var(--main-dark-color);
+	height: 15vh;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 3rem;
+	color: white;
+
+
+}
+
+ul.menu {
+	display: none;
+	flex-flow: row;
+	flex-wrap: wrap;
+	background-color: var(--secondary-light-color);
+	justify-content: center;
+	align-items: flex-end;
+	width: 100%;
+}
+
+
+
+ul.menu li {
+	padding: 0.5rem;
+	flex-basis: 85%;
+	border-radius: 5px;
+}
+
+li.list-label li.list {
+	font-size: 1rem;
+	font-weight: normal;
+	padding-left: 0rem;
+}
+
+ul.menu > li:first-of-type {
+	margin-top: 1rem;
+}
+
+ul.menu > li:last-of-type {
+	margin-bottom: 1rem;
+}
+
+ul.menu > li.list-label {
+	background-color: var(--secondary-light-color);
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+button.menu-btn {
+	background-color: transparent;
+	border: none;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 1rem;
+}
+
+.fa-check-circle {
+	margin-left: 1rem;
+	margin-right: 0.5rem;
+}
+
+
+.menu .fas {
+	margin-right: 0.5rem;
+}
+
+/* Utility classes */
+
+.open {
+	display: flex;
+}
+
+.selected {
+	background-color: var(--middle-color) !important;
+}
+
+
