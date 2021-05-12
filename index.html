@@ -29,14 +29,76 @@
             </li>
             <li><i class="fas fa-plus"></i></i>Add List</li>
         </ul>
-        <div class="todo list">
-            <h2>Chores</h2>
-            <h2>Due Date</h2>
-            <li><span class="task">Laundry</span><span class="due-date">9/20/2020</span></li>
-            <li><span class="task">Wash Dishes</span><span class="due-date">9/21/2020</span></li>
-            <li><span class="task">Take out Trash</span><span class="due-date">9/21/2020</span></li>
-            <li><span class="task"></span><span class="due-date">9/20/2020</span></li>
-            <li><span class="task">Laundry</span><span class="due-date">9/20/2020</span></li>
+        <div class="todo-list">
+            <div class="column-names">
+                <h2 class="list-column-name">Chores</h2>
+                <h2 class="due-date-column-name">Due Date</h2>
+            </div>
+            <li class="todo-item">
+                <div class="task-date-btns">
+                    <span class="task">Laundry</span>
+                    <div class="date-and-btns">
+                        <span class="due-date">9/20/2020</span>
+                        <button class="new-note-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>
+                <div class="task-editor">
+                    <form action="" method="get" class="task-editor-form">
+                        <input class="task-field" name="task" type="text" placeholder="task" />
+                        <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                        <div class="datepicker-addbutton-cancelbutton">
+                            <input class="date-picker" name="due-date" type="date" />
+                            <div class="add-cancel-buttons">
+                                <button class="add-task-btn"><i class="far fa-check-circle"></i></button>
+                                <button class="cancel-task-submission-btn"><i class="far fa-times-circle"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </li>
+            <li class="todo-item">
+                <div class="task-date-btns">
+                    <span class="task">Wash Dishes</span>
+                    <div class="date-and-btns">
+                        <span class="due-date">9/21/2020</span>
+                        <button class="new-note-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </li>
+            <li class="todo-item">
+                <div class="task-date-btns">
+                    <span class="task">Take out Trash</span>
+                    <div class="date-and-btns">
+                        <span class="due-date">9/21/2020</span>
+                        <button class="new-note-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="far fa-trash-alt"></i></button>
+                        <div class="date-and-btns">
+                        </div>
+            </li>
+            <li class="todo-item">
+                <div class="task-date-btns">
+                    <span class="task">Shoot myself in the head let's see what happens here</span>
+                    <div class="date-and-btns">
+                        <span class="due-date">9/20/2020</span>
+                        <button class="new-note-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </li>
+            <li class="todo-item">
+                <div class="task-date-btns">
+                    <span class="task">Laundry</span>
+                    <div class="date-and-btns">
+                        <span class="due-date">9/20/2020</span>
+                        <button class="new-note-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </li>
         </div>
 
     </div>

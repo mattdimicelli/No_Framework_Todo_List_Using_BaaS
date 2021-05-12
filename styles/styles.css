@@ -2,94 +2,103 @@
 
 :root {
 	--main-dark-color: #333;
-	--secondary-dark-color: #444;
 	--main-light-color: #eee;
-	--secondary-light-color: #ddd;
 	--middle-color: hsl(54, 1%, 70%);
+	--secondary-dark-color: #444;
+	--secondary-light-color: #ddd;
+}
+
+html {
+	box-sizing: border-box;
+}
+
+button {
+	background-color: transparent;
+	border: none;
+	color: inherit;
+	font-size: inherit;
 }
 
 h1 {
 	font-size: 3rem;
 }
 
-div.main-container {
+ul  {
+	list-style-type: none;
+}
+
+footer {
+	align-items: center;
+	bottom: 0;
+	background-color: var(--main-dark-color);
+	display: flex;
+	height: 5vh;
+	justify-content: center;
+	left: 0;
+	position: absolute;
+	width: 100%;
+}
+
+header {
+	align-items: center;
+	background-color: var(--main-dark-color);
+	color: white;
+	display: flex;
+	font-size: 3rem;
+	height: 15vh;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.main-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
 
-footer {
-	width: 100%;
-	background-color: var(--main-dark-color);
-	height: 5vh;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-span.copyright {
+.copyright {
 	margin-right: 0.7rem;
 }
 
-header {
-	width: 100%;
-	background-color: var(--main-dark-color);
-	height: 15vh;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	font-size: 3rem;
-	color: white;
 
-
-}
-
-ul.menu {
+.menu {
+	align-items: flex-end;
+	background-color: var(--secondary-light-color);
 	display: none;
 	flex-flow: row;
 	flex-wrap: wrap;
-	background-color: var(--secondary-light-color);
 	justify-content: center;
-	align-items: flex-end;
 	width: 100%;
 }
 
 
-
-ul.menu li {
+.menu li {
 	padding: 0.5rem;
 	flex-basis: 85%;
 	border-radius: 5px;
 }
 
-li.list-label li.list {
+.list-label .list {
 	font-size: 1rem;
 	font-weight: normal;
 	padding-left: 0rem;
 }
 
-ul.menu > li:first-of-type {
+.menu > li:first-of-type {
 	margin-top: 1rem;
 }
 
-ul.menu > li:last-of-type {
+.menu > li:last-of-type {
 	margin-bottom: 1rem;
 }
 
-ul.menu > li.list-label {
+.menu > .list-label {
 	background-color: var(--secondary-light-color);
 	font-size: 1.5rem;
 	font-weight: bold;
 }
 
-button.menu-btn {
-	background-color: transparent;
-	border: none;
-	font-size: inherit;
-	color: inherit;
+.menu-btn {
 	margin-right: 1rem;
 }
 
@@ -98,10 +107,93 @@ button.menu-btn {
 	margin-right: 0.5rem;
 }
 
-
 .menu .fas {
 	margin-right: 0.5rem;
 }
+
+.task-date-btns {
+	display: flex;
+	justify-content: space-between;
+}
+
+.task-editor {
+	height: 150px;
+	border: 1px solid black;
+	border-radius: 0.5rem;
+	margin: 1rem 1rem 0 1rem;
+	padding: 1rem;
+}
+
+.todo-item {
+	margin-bottom: 1rem;
+}
+
+.task-date-btns:hover {
+	background-color: var(--secondary-light-color);
+}
+
+.task {
+	display: block;
+	margin-left: 1rem;
+}
+
+.column-names {
+	display: flex;
+	justify-content: space-between;
+}
+
+.list-column-name {
+	margin-left: 1rem;
+}
+
+.due-date-column-name {
+	margin-right: 2rem;
+}
+
+.date-and-btns {
+	margin-right: 1rem;
+	flex-shrink: 0;
+	flex-grow: 0;
+}
+
+.delete-btn {
+	padding: 0;
+}
+
+.new-note-btn {
+	padding: 0;
+	margin-left: 1rem;
+}
+
+.date-picker {
+	display: inline-block;
+}
+
+.description-field, .task-field {
+	display: block;
+	width: 100%;
+	border: 0;
+}
+
+.description-field:focus, .task-field:focus {
+	outline: none;
+}
+
+.description-field {
+	height: 100px;
+}
+
+.add-task-btn, 
+.cancel-task-submission-btn {
+	display: inline-block;
+}
+
+.datepicker-addbutton-cancelbutton {
+	display: flex;
+	justify-content: space-between;
+}
+
+
 
 /* Utility classes */
 
