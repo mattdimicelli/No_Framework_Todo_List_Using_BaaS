@@ -43,6 +43,7 @@ footer {
 	justify-content: center;
 	left: 0;
 	width: 100%;
+	color: white;
 }
 
 header {
@@ -135,6 +136,9 @@ header {
 
 .todo-item {
 	margin-bottom: 1rem;
+	width: 98%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .task-date-btns:hover {
@@ -199,6 +203,18 @@ header {
 	justify-content: space-between;
 }
 
+.github-link,
+.github-link:link,
+.github-link:visited {
+	color: white;
+	font-size: 2rem;
+}
+
+.menu-btn:hover {
+	background-color: var(--middle-color);
+}
+
+
 
 @media only screen and (min-width: 900px) {
 	.menu {
@@ -211,6 +227,7 @@ header {
 		height: 150vh;
 		align-items: center;
 		overflow: hidden;
+		padding-left: 1rem;
 	}
 	.main-container {
 		flex-direction: row;
