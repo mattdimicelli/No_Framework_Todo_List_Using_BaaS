@@ -214,6 +214,15 @@ header {
 	background-color: var(--middle-color);
 }
 
+.fa-plus{
+	margin-right: 1rem;
+}
+
+.new-task-btn {
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+}
+
 
 
 @media only screen and (min-width: 900px) {
