@@ -176,11 +176,13 @@ header {
 }
 
 .task-delete-btn:hover,
-.edit-task-submit-btn:hover  {
+.edit-task-submit-btn:hover,
+.cancel-new-task-btn:hover  {
 	background-color: var(--secondary-light-color);
 }
 
-.task-delete-btn {
+.task-delete-btn,
+.cancel-new-task-btn {
 	margin-left: auto;
 }
 
@@ -253,11 +255,22 @@ header {
 		overflow: hidden;
 		padding-left: 1rem;
 	}
-	/* .main-container {
+
+	.main-container {
 		flex-direction: row;
-	} */
+		justify-content: normal;
+	}
+
+	.wrapper-for-large-screens {
+		width: 100%;
+	}
+
 	.todo-list-wrapper {
 		width: 100%;
+	}
+
+	.new-task-btn {
+		margin-left: 40%;
 	}
 }
 
