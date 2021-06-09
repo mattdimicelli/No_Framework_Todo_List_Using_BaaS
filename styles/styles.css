@@ -126,7 +126,8 @@ header {
 	justify-content: space-between;
 }
 
-.task-editor {
+.task-editor,
+.new-task-editor {
 	height: 150px;
 	border: 1px solid black;
 	border-radius: 0.5rem;
@@ -169,9 +170,18 @@ header {
 	flex-grow: 0;
 }
 
-.new-note-btn {
+.edit-task-btn {
 	padding: 0;
 	margin-left: 1rem;
+}
+
+.task-delete-btn:hover,
+.edit-task-submit-btn:hover  {
+	background-color: var(--secondary-light-color);
+}
+
+.task-delete-btn {
+	margin-left: auto;
 }
 
 .date-picker {
@@ -193,7 +203,7 @@ header {
 	resize: none;
 }
 
-.add-task-btn, 
+.edit-task-submit-btn, 
 .cancel-task-submission-btn {
 	display: inline-block;
 }
@@ -243,10 +253,9 @@ header {
 		overflow: hidden;
 		padding-left: 1rem;
 	}
-	.main-container {
+	/* .main-container {
 		flex-direction: row;
-		
-	}
+	} */
 	.todo-list-wrapper {
 		width: 100%;
 	}
@@ -261,6 +270,10 @@ header {
 
 .selected {
 	background-color: var(--middle-color) !important;
+}
+
+.hidden {
+	display: none;
 }
 
 
