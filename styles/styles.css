@@ -230,14 +230,23 @@ header {
 	margin-right: 1rem;
 }
 
+.new-list-cancel-btn{
+	padding-left: 0.5rem;
+}
+
 .new-task-btn {
 	margin-bottom: 1rem;
 	margin-top: 1rem;
-	width: 20%;
+	width: 30%;
 	align-self: center;
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
+	margin-left: 31%;
 	
+}
+
+.new-list-text-input {
+	width: 69%;
 }
 
 
@@ -246,7 +255,7 @@ header {
 	.menu {
 		display: block;
 		flex-direction: row;
-		width: 20%;
+		width: 34%;
 		margin-top: 0;
 		margin-bottom: 0;
 		margin-block-end: 0;

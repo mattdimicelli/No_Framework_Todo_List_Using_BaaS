@@ -10,8 +10,21 @@ class DomController {
     }
     
     handleClick(e) {
+        let target;
 
-        const target = e.target.closest('button');
+        if(e.target.closest('i')) {
+            target = e.target.closest('i');
+            if(target.classList.contains('new-list-cancel-btn')) {
+                e.preventDefault();
+                target.parentElement.remove();
+            }
+            if(target.classList.contains('new-list-submit-btn')) {
+                e.preventDefault();
+                
+            }
+        }
+
+        target = e.target.closest('button, li');
 
         if(target) {
             if(target.className === 'menu-btn') {
@@ -34,7 +47,15 @@ class DomController {
                 e.preventDefault();
                 this.taskDeleteBtnHandler(target);
             }
-            
+            if(target.className === 'cancel-new-task-btn') {
+                e.preventDefault();
+                const newTaskEditor = target.parentElement.parentElement.parentElement;
+                this.cancelNewTaskBtnHandler(newTaskEditor);
+            }
+            if(target.classList.contains('add-list-btn')) {
+                e.preventDefault();
+                this.addListBtnHandler();
+            } 
         }
     }
 
@@ -44,6 +65,19 @@ class DomController {
             menu.style.display = 'block';
         }
         else menu.style.display = 'none';
+    }
+
+    addListBtnHandler() {
+        const ul = document.querySelector('.ul-list-of-lists');
+        const li = document.createElement('li');
+        li.classList.add('list');
+        li.classList.add('menu-btn');
+        const i = document.createElement('i');
+        i.classList.add('fas', 'fa-list-alt');
+        li.append(i);
+        const textInput = `<input class="new-list-text-input" type="text" /><i class="far fa-times-circle new-list-cancel-btn"><i class="far fa-check-circle new-list-submit-btn">`;
+        li.insertAdjacentHTML('beforeend', textInput);
+        ul.append(li);
     }
 
     taskDeleteBtnHandler(target) {
@@ -58,7 +92,6 @@ class DomController {
 
     editTaskSubmitBtnHandler(target) {
         
-
         const taskName = target.parentElement.parentElement.children[0].value;
         const details = target.parentElement.parentElement.children[1].value;
         const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsNumber;
@@ -75,8 +108,6 @@ class DomController {
             const taskIsNew = (target.parentElement.parentElement.parentElement.className === 'new-task-editor') ? true : false;
             const currentTime = Date.now(); //will use currentTime as a unique identifier for each task
 
-        
-        
             if(taskIsNew) {
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
                 logic.addTaskToCurrentList(task);
@@ -96,9 +127,6 @@ class DomController {
                 taskEditor.classList.toggle('hidden');
             }
         }
-
-    
-
     }
 
     dueDateIsValid(dueDateValueAsNumber) {
@@ -106,7 +134,9 @@ class DomController {
         return true;
     }
 
-    
+    cancelNewTaskBtnHandler(newTaskEditor) {
+        newTaskEditor.classList.add('hidden');
+    }
 
     newTaskBtnHandler(newTaskEditor) {
         newTaskEditor.classList.remove('hidden');
@@ -148,8 +178,6 @@ class DomController {
         const year = date.getUTCFullYear();
         return `${month}/${day}/${year}`;
     }
-
-   
 }
 
 export const domController = new DomController();
