@@ -3,8 +3,7 @@ import {List} from './List';
 
 let currentList;
 
-
-const lists = new Map();
+const lists = {};
 
 class Logic {
     constructor() {}
@@ -36,22 +35,26 @@ class Logic {
     //     return currentTask;
     // }
 
-    // createNewList() {
-    //     const newList = new List(name);
-    //     lists.set(newList, newList);
-    // }
+    createNewList(name) {
+        const newList = new List(name);
+        lists[name] = newList;
+    }
 
     
     setDefaultList() {
-        if (lists.size === 0) {
+        if (Object.keys(lists).length === 0) {
             const chores = new List('Chores');
-            lists.set(chores, chores);
-            this.setCurrentList(lists.get(chores));
+            lists.Chores = chores;
+            this.setCurrentList('Chores');
         } 
     }
 
-    setCurrentList(list) {
-        currentList = list;
+    setCurrentList(listName) {
+        console.log(listName);
+        console.log(lists[listName]);
+        console.log(lists.poop);
+        console.log(lists);
+        currentList = lists[listName];
     }
 
     // getCurrentList() {

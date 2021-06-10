@@ -1,4 +1,4 @@
-import { logic, currentList } from './Logic';
+import { logic, currentList, lists } from './Logic';
 
 
 class DomController {
@@ -20,7 +20,8 @@ class DomController {
             }
             if(target.classList.contains('new-list-submit-btn')) {
                 e.preventDefault();
-                
+                const listName = target.previousElementSibling.previousElementSibling.value;
+                this.newListSubmitBtnHandler(target, listName);
             }
         }
 
@@ -56,7 +57,34 @@ class DomController {
                 e.preventDefault();
                 this.addListBtnHandler();
             } 
+            if(target.className === 'list menu-btn' && !target.children[1]) {
+                const listName = target.childNodes[1];
+                this.changeListHandler(listName);
+            }
         }
+    }
+
+    changeListHandler(listName) {
+        logic.setCurrentList(listName);
+        this.renderTasks();
+        const columnName = document.querySelector('.list-column-name');
+        columnName.textContent = listName;
+    }
+
+
+    newListSubmitBtnHandler(target, listName) {
+        logic.createNewList(listName);
+        target.parentElement.remove();
+        this.renderLists();
+    }
+
+    renderLists() {
+        const ul = document.querySelector('.ul-list-of-lists');
+        let html = '';
+        for (const key in lists) {
+            html += `<li class="list menu-btn"><i class="fas fa-list-alt"></i>${key}</li>`;
+        }
+        ul.innerHTML = html;
     }
 
     menuBtnHandler(menu) {
@@ -70,12 +98,11 @@ class DomController {
     addListBtnHandler() {
         const ul = document.querySelector('.ul-list-of-lists');
         const li = document.createElement('li');
-        li.classList.add('list');
-        li.classList.add('menu-btn');
+        li.classList.add('list', 'menu-btn');
         const i = document.createElement('i');
         i.classList.add('fas', 'fa-list-alt');
         li.append(i);
-        const textInput = `<input class="new-list-text-input" type="text" /><i class="far fa-times-circle new-list-cancel-btn"><i class="far fa-check-circle new-list-submit-btn">`;
+        const textInput = `<input class="new-list-text-input" type="text" /><i class="far fa-times-circle new-list-cancel-btn"></i><i class="far fa-check-circle new-list-submit-btn"></i>`;
         li.insertAdjacentHTML('beforeend', textInput);
         ul.append(li);
     }
@@ -120,7 +147,6 @@ class DomController {
             }
             const taskEditor = target.parentElement.parentElement.parentElement;
             if(taskEditor.className === 'new-task-editor') {
-                    console.log('fire');
                     taskEditor.firstElementChild.firstElementChild.value = '';
                     taskEditor.firstElementChild.children[1].value = '';
                     taskEditor.firstElementChild.children[2].firstElementChild.value = '';
