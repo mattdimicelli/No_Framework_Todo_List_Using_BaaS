@@ -2,6 +2,7 @@ import { logic, currentList, lists } from './Logic';
 
 let oldName;
 
+
 class DomController {
 
     constructor()  {}
@@ -86,6 +87,7 @@ class DomController {
         }
         logic.modifyListName(oldName, newName);
         this.renderLists();
+        this.changeListHandler(newName);
     }
 
     editListIconHandler(listName, listItem) {
@@ -109,6 +111,7 @@ class DomController {
         logic.createNewList(listName);
         target.parentElement.remove();
         this.renderLists();
+        this.changeListHandler(listName);
     }
 
     renderLists() {
