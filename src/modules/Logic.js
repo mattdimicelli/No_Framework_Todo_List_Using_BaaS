@@ -2,6 +2,7 @@ import {Task} from './Task';
 import {List} from './List';
 
 let currentList;
+let nextListId = 0;
 
 const lists = {};
 
@@ -36,19 +37,21 @@ class Logic {
     // }
 
     createNewList(name) {
-        const newList = new List(name);
+        const newList = new List(name, nextListId++);
         lists[name] = newList;
     }
 
     modifyListName(oldName, newName) {
         lists[newName] = lists[oldName];
         delete lists[oldName];
+        lists[newName].name = newName;
+        console.log(lists);
     }
 
     
     setDefaultList() {
         if (Object.keys(lists).length === 0) {
-            const chores = new List('Chores');
+            const chores = new List('Chores', nextListId++);
             lists.Chores = chores;
             this.setCurrentList('Chores');
         } 

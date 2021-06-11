@@ -36,7 +36,12 @@ class DomController {
                 e.preventDefault();
                 const textInput = target.previousElementSibling.previousElementSibling.previousElementSibling;
                 const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
+                if(newName === oldName) {
+                     textInput.focus();
+                     return;
+                }
                 this.editListSubmitBtnHandler(newName, textInput);
+                
             }
         }
 
@@ -117,8 +122,14 @@ class DomController {
     renderLists() {
         const ul = document.querySelector('.ul-list-of-lists');
         let html = '';
-        for (const key in lists) {
-            html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${key}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
+        const sortedLists = Object.values(lists).sort((list1, list2) => {
+            if(list1.id > list2.id) return 1;
+            if (list1.id === list2.id) return 0;
+            if (list1.id < list2.id) return -1;
+        }); 
+        console.log(sortedLists);
+        for (const list of sortedLists) {
+            html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
         }
         ul.innerHTML = html;
     }
