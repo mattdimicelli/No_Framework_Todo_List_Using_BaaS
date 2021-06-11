@@ -33,8 +33,9 @@ class DomController {
             }
             if(target.classList.contains('edit-list-submit-btn')) {
                 e.preventDefault();
+                const textInput = target.previousElementSibling.previousElementSibling.previousElementSibling;
                 const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
-                this.editListSubmitBtnHandler(newName);
+                this.editListSubmitBtnHandler(newName, textInput);
             }
         }
 
@@ -71,14 +72,18 @@ class DomController {
                 e.preventDefault();
                 this.addListBtnHandler();
             } 
-            if(target.className === 'list menu-btn' && !target.children[1]) {
+            if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
                 const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
             }
         }
     }
 
-    editListSubmitBtnHandler(newName) {
+    editListSubmitBtnHandler(newName, textInput) {
+        if(newName === '') {
+            textInput.focus();
+            return;
+        }
         logic.modifyListName(oldName, newName);
         this.renderLists();
     }
