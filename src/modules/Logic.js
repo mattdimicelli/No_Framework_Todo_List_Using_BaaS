@@ -40,6 +40,11 @@ class Logic {
         lists[name] = newList;
     }
 
+    modifyListName(oldName, newName) {
+        lists[newName] = lists[oldName];
+        delete lists[oldName];
+    }
+
     
     setDefaultList() {
         if (Object.keys(lists).length === 0) {
@@ -50,10 +55,6 @@ class Logic {
     }
 
     setCurrentList(listName) {
-        console.log(listName);
-        console.log(lists[listName]);
-        console.log(lists.poop);
-        console.log(lists);
         currentList = lists[listName];
     }
 

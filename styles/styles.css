@@ -110,6 +110,11 @@ header {
 
 .menu-btn {
 	margin-right: 1rem;
+	display: flex;
+}
+
+span.edit-list-icon {
+	margin-left: auto;
 }
 
 .fa-check-circle {

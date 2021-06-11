@@ -1,5 +1,6 @@
 import { logic, currentList, lists } from './Logic';
 
+let oldName;
 
 class DomController {
 
@@ -20,8 +21,20 @@ class DomController {
             }
             if(target.classList.contains('new-list-submit-btn')) {
                 e.preventDefault();
+                const listTextInput = target.previousElementSibling.previousElementSibling;
                 const listName = target.previousElementSibling.previousElementSibling.value;
-                this.newListSubmitBtnHandler(target, listName);
+                this.newListSubmitBtnHandler(target, listName, listTextInput);
+            }
+            if(target.classList.contains('edit-list-icon')) {
+                e.preventDefault();
+                const listItem = target.parentElement.parentElement;
+                const listName = target.parentElement.parentElement.textContent;
+                this.editListIconHandler(listName, listItem); 
+            }
+            if(target.classList.contains('edit-list-submit-btn')) {
+                e.preventDefault();
+                const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
+                this.editListSubmitBtnHandler(newName);
             }
         }
 
@@ -34,7 +47,8 @@ class DomController {
             }
             if(target.className === 'edit-task-btn') {
                 const taskEditor = target.parentElement.parentElement.parentElement.children[1];
-                this.taskEditorHandler(taskEditor);
+                const taskId = target.parentElement.parentElement.parentElement.dataset.id;
+                this.taskEditorHandler(taskEditor, taskId);
             }
             if(target.className === 'edit-task-submit-btn') {
                 e.preventDefault();
@@ -58,12 +72,22 @@ class DomController {
                 this.addListBtnHandler();
             } 
             if(target.className === 'list menu-btn' && !target.children[1]) {
-                const listName = target.childNodes[1];
+                const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
             }
         }
     }
 
+    editListSubmitBtnHandler(newName) {
+        logic.modifyListName(oldName, newName);
+        this.renderLists();
+    }
+
+    editListIconHandler(listName, listItem) {
+        oldName = listName;
+        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle new-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        listItem.innerHTML = html;
+    }
     changeListHandler(listName) {
         logic.setCurrentList(listName);
         this.renderTasks();
@@ -72,7 +96,11 @@ class DomController {
     }
 
 
-    newListSubmitBtnHandler(target, listName) {
+    newListSubmitBtnHandler(target, listName, listTextInput) {
+        if(listName === '') {
+            listTextInput.focus();
+            return;
+        }
         logic.createNewList(listName);
         target.parentElement.remove();
         this.renderLists();
@@ -82,7 +110,7 @@ class DomController {
         const ul = document.querySelector('.ul-list-of-lists');
         let html = '';
         for (const key in lists) {
-            html += `<li class="list menu-btn"><i class="fas fa-list-alt"></i>${key}</li>`;
+            html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${key}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
         }
         ul.innerHTML = html;
     }
@@ -113,8 +141,15 @@ class DomController {
         this.renderTasks();
     }
 
-    taskEditorHandler(taskEditor) {
+    taskEditorHandler(taskEditor, taskId) {
         taskEditor.classList.toggle('hidden');
+        const taskTextInput = taskEditor.firstElementChild.firstElementChild;
+        const detailsTextarea = taskEditor.firstElementChild.firstElementChild.nextElementSibling;
+        const datepicker = taskEditor.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild;
+
+        taskTextInput.value = currentList.tasks[taskId].name;
+        detailsTextarea.value = currentList.tasks[taskId].details;
+        datepicker.valueAsNumber = currentList.tasks[taskId].dueDate;
     }
 
     editTaskSubmitBtnHandler(target) {
@@ -183,7 +218,7 @@ class DomController {
             </div>
         <div class="task-editor hidden">
                         <form action="" method="get" class="task-editor-form">
-                            <input class="task-field" name="task" type="text" placeholder="task" />
+                            <input class="task-field" name="task" type="text" placeholder="Task" />
                             <textarea class="description-field" name="description" placeholder="Details"></textarea>
                             <div class="datepicker-addbutton">
                                 <input class="date-picker" name="due-date" type="date" required />
