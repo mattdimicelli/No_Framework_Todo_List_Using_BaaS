@@ -1,4 +1,4 @@
-import { logic, currentList, lists } from './Logic';
+import { logic, currentList, lists} from './Logic';
 
 let oldName;
 
@@ -41,7 +41,14 @@ class DomController {
                      return;
                 }
                 this.editListSubmitBtnHandler(newName, textInput);
-                
+            }
+            if(target.classList.contains('edit-list-cancel-btn')) {
+                e.preventDefault();
+                this.renderLists();
+            }
+            if(target.className === 'far fa-trash-alt') {
+                e.preventDefault();
+                this.deleteListBtnHandler();
             }
         }
 
@@ -85,6 +92,20 @@ class DomController {
         }
     }
 
+    deleteListBtnHandler() {
+        const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all of it's associated tasks?`);
+        if(reallyDelete) {
+            delete lists[oldName];
+            if(Object.keys(lists).length === 0) {
+                logic.setCurrentyList = null;
+            } else { logic.setNextListAsCurrent();
+            }
+            this.renderLists();
+            this.renderTasks();   
+        } else this.renderLists();
+
+    }
+
     editListSubmitBtnHandler(newName, textInput) {
         if(newName === '') {
             textInput.focus();
@@ -97,11 +118,12 @@ class DomController {
 
     editListIconHandler(listName, listItem) {
         oldName = listName;
-        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle new-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
     }
+
     changeListHandler(listName) {
-        logic.setCurrentList(listName);
+        logic.setCurrentyList(listName);
         this.renderTasks();
         const columnName = document.querySelector('.list-column-name');
         columnName.textContent = listName;
@@ -225,6 +247,7 @@ class DomController {
     renderTasks() {
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
+        if(currentList === null) ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks)) {
             const html = `<li class="todo-item" data-id="${task.taskId}">
             <div class="task-date-btns">

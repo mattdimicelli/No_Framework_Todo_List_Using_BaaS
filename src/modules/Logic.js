@@ -32,9 +32,6 @@ class Logic {
         delete currentList.tasks[task];
     }
 
-     // getCurrentTask() {
-    //     return currentTask;
-    // }
 
     createNewList(name) {
         const newList = new List(name, nextListId++);
@@ -53,21 +50,29 @@ class Logic {
         if (Object.keys(lists).length === 0) {
             const chores = new List('Chores', nextListId++);
             lists.Chores = chores;
-            this.setCurrentList('Chores');
+            this.setCurrentyList('Chores');
         } 
     }
 
-    setCurrentList(listName) {
-        currentList = lists[listName];
+    setCurrentyList(listName) {
+        if (listName === null) { 
+            currentList = null;   
+        } else {
+            currentList = lists[listName];
+        }
     }
 
-    // getCurrentList() {
-    //     return currentList;
-    // }
+    setNextListAsCurrent() {
+        const firstList = Object.keys(lists)[0];
+        currentList = lists[firstList];
+    }
+
+
 
    
 }
 
 const logic = new Logic();
+
 
 export {currentList, lists, logic};
