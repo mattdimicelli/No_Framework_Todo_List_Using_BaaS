@@ -46,6 +46,10 @@ class DomController {
                 e.preventDefault();
                 this.renderLists();
             }
+            if(target.className === 'far fa-trash-alt') {
+                e.preventDefault();
+                this.deleteListHandler();
+            }
         }
 
         target = e.target.closest('button, li');
@@ -85,6 +89,25 @@ class DomController {
                 const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
             }
+        }
+    }
+
+    deleteListHandler() {
+        const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all associated tasks?`);
+        if(reallyDelete) {
+            if(Object.keys(lists).length > 1) {
+                logic.deleteList(oldName);
+                logic.setCurrentListToARemainingList();
+                this.renderLists();
+                this.renderTasks();
+                const columnName = document.querySelector('.list-column-name');
+                columnName.textContent = currentList.name;
+            } else {
+                alert('Unable to delete your only list!');
+                this.renderLists();
+            }
+        } else {
+            this.renderLists();
         }
     }
 
@@ -130,7 +153,6 @@ class DomController {
             if (list1.id === list2.id) return 0;
             if (list1.id < list2.id) return -1;
         }); 
-        console.log(sortedLists);
         for (const list of sortedLists) {
             html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
         }

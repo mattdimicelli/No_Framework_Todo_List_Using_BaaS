@@ -61,6 +61,15 @@ class Logic {
         currentList = lists[listName];
     }
 
+    setCurrentListToARemainingList() {
+        const firstList = Object.keys(lists)[0];
+        this.setCurrentList(firstList);
+    }
+
+    deleteList(listName) {
+        delete lists[listName];
+    }
+
     // getCurrentList() {
     //     return currentList;
     // }
