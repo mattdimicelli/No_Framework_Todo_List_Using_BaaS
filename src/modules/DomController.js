@@ -89,8 +89,60 @@ class DomController {
                 const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
             }
+            if(target.className === 'menu-btn all') {
+                e.preventDefault();
+                this.renderTasks();
+            }
+            if(target.className === 'menu-btn today') {
+                e.preventDefault();
+                this.viewOnlyToday();
+            }
         }
     }
+
+    viewOnlyToday() {
+        const ulForTasks = document.querySelector('.the-task-items');
+        ulForTasks.innerHTML = '';
+        console.log(Date.now())
+        for (const task of Object.values(currentList.tasks).filter(list => {
+            const dueDateObj = new Date(list.dueDate);
+            const dueDateDay = dueDateObj.getUTCDate();
+            const dueDateMonth = dueDateObj.getUTCMonth();
+            const dueDateYear = dueDateObj.getUTCFullYear();
+            const currentDay = new Date().getUTCDate();
+            const currentMonth = new Date().getUTCMonth();
+            const currentYear = new Date().getUTCFullYear();
+
+            if (dueDateDay === currentDay && dueDateMonth === currentMonth && dueDateYear === currentYear) {
+                return true;
+            } else return false;
+        })) {
+            const html = `<li class="todo-item" data-id="${task.taskId}">
+            <div class="task-date-btns">
+                <span class="task">${task.name}</span>
+                <div class="date-and-btns">
+                    <span class="due-date">${this.createReadableDate(task.dueDate)}</span>
+                    <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
+
+                </div>
+            </div>
+        <div class="task-editor hidden">
+                        <form action="" method="get" class="task-editor-form">
+                            <input class="task-field" name="task" type="text" placeholder="Task" />
+                            <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                            <div class="datepicker-addbutton">
+                                <input class="date-picker" name="due-date" type="date" required />
+                                <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
+                                <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </li>`;
+            ulForTasks.innerHTML += html;
+        }
+    }
+
+ 
 
     deleteListHandler() {
         const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all associated tasks?`);
