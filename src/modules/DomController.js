@@ -41,7 +41,10 @@ class DomController {
                      return;
                 }
                 this.editListSubmitBtnHandler(newName, textInput);
-                
+            }
+            if(target.classList.contains('edit-list-cancel-btn')) {
+                e.preventDefault();
+                this.renderLists();
             }
         }
 
@@ -97,7 +100,7 @@ class DomController {
 
     editListIconHandler(listName, listItem) {
         oldName = listName;
-        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle new-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
     }
     changeListHandler(listName) {

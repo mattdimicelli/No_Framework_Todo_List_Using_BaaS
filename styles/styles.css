@@ -235,7 +235,8 @@ span.edit-list-icon {
 	margin-right: 1rem;
 }
 
-.new-list-cancel-btn{
+.new-list-cancel-btn,
+.edit-list-cancel-btn{
 	padding-left: 0.5rem;
 }
 
