@@ -94,6 +94,10 @@ header {
 	padding-left: 0rem;
 }
 
+.fa-trash-alt {
+	margin-left: 1rem;
+}
+
 .menu > li:first-of-type {
 	margin-top: 1rem;
 }
@@ -237,7 +241,7 @@ span.edit-list-icon {
 
 .new-list-cancel-btn,
 .edit-list-cancel-btn{
-	padding-left: 0.5rem;
+	margin-left: 1rem;
 }
 
 .new-task-btn {

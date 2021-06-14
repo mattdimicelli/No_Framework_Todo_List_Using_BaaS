@@ -46,7 +46,7 @@ class DomController {
                 e.preventDefault();
                 this.renderLists();
             }
-            if(target.className === 'far fa-trash-alt') {
+            if(target.className === 'far fa-trash-alt list') {
                 e.preventDefault();
                 this.deleteListHandler();
             }
@@ -103,15 +103,17 @@ class DomController {
     viewOnlyToday() {
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
-        console.log(Date.now())
-        for (const task of Object.values(currentList.tasks).filter(list => {
-            const dueDateObj = new Date(list.dueDate);
-            const dueDateDay = dueDateObj.getUTCDate();
-            const dueDateMonth = dueDateObj.getUTCMonth();
-            const dueDateYear = dueDateObj.getUTCFullYear();
-            const currentDay = new Date().getUTCDate();
-            const currentMonth = new Date().getUTCMonth();
-            const currentYear = new Date().getUTCFullYear();
+        for (const task of Object.values(currentList.tasks).filter(task => {
+            console.log(task.dueDate);
+            const dueDateObj = new Date(task.dueDate);
+            const dueDateDay = dueDateObj.getDate();
+            const dueDateMonth = dueDateObj.getMonth();
+            const dueDateYear = dueDateObj.getFullYear();
+            const currentDay = new Date().getDate();
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+            console.log({dueDateDay, currentDay});
 
             if (dueDateDay === currentDay && dueDateMonth === currentMonth && dueDateYear === currentYear) {
                 return true;
@@ -175,7 +177,7 @@ class DomController {
 
     editListIconHandler(listName, listItem) {
         oldName = listName;
-        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt list"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
     }
     changeListHandler(listName) {
@@ -252,7 +254,7 @@ class DomController {
         
         const taskName = target.parentElement.parentElement.children[0].value;
         const details = target.parentElement.parentElement.children[1].value;
-        const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsNumber;
+        const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsDate;
 
         if(!this.dueDateIsValid(dueDate)){
             target.parentElement.parentElement.children[2].firstElementChild.focus();
@@ -267,6 +269,7 @@ class DomController {
             const currentTime = Date.now(); //will use currentTime as a unique identifier for each task
 
             if(taskIsNew) {
+                console.log(dueDate);
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
                 logic.addTaskToCurrentList(task);
                 this.renderTasks();
