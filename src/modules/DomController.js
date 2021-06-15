@@ -61,7 +61,7 @@ class DomController {
             }
             if(target.className === 'edit-task-btn') {
                 const taskEditor = target.parentElement.parentElement.parentElement.children[1];
-                const taskId = target.parentElement.parentElement.parentElement.dataset.id;
+                const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
                 this.taskEditorHandler(taskEditor, taskId);
             }
             if(target.className === 'edit-task-submit-btn') {
@@ -165,6 +165,11 @@ class DomController {
         }
     }
 
+    updateColumnName() {
+        const columnName = document.querySelector('.list-column-name');
+        columnName.textContent = currentList.name;
+    }
+
  
 
     deleteListHandler() {
@@ -175,8 +180,7 @@ class DomController {
                 logic.setCurrentListToARemainingList();
                 this.renderLists();
                 this.renderTasks();
-                const columnName = document.querySelector('.list-column-name');
-                columnName.textContent = currentList.name;
+                this.updateColumnName();
             } else {
                 alert('Unable to delete your only list!');
                 this.renderLists();
@@ -265,8 +269,9 @@ class DomController {
         const taskTextInput = taskEditor.firstElementChild.firstElementChild;
         const detailsTextarea = taskEditor.firstElementChild.firstElementChild.nextElementSibling;
         const datepicker = taskEditor.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild;
-
+    
         taskTextInput.value = currentList.tasks[taskId].name;
+     
         detailsTextarea.value = currentList.tasks[taskId].details;
         datepicker.valueAsNumber = currentList.tasks[taskId].dueDate;
     }
@@ -291,7 +296,7 @@ class DomController {
 
             if(taskIsNew) {
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
-                logic.addTaskToCurrentList(task);
+                logic.addTaskToCurrentList(task); //here?
                 this.renderTasks();
             }
             if(!taskIsNew) {
@@ -326,7 +331,7 @@ class DomController {
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks)) {
-            const html = this.createTaskHTML(task.id, task.name, task.dueDate);
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate); //here
             ulForTasks.innerHTML += html;
         }
     }
