@@ -4,7 +4,7 @@ import {List} from './List';
 let currentList;
 let nextListId = 0;
 
-const lists = {};
+let lists = {};
 
 class Logic {
     constructor() {}

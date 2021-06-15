@@ -1,6 +1,6 @@
 import {domController} from './modules/DomController';
 import {currentList, lists, logic, nextListId} from './modules/Logic';
-import {List} from './modules/List';
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
