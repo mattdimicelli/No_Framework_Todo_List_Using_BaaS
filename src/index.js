@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('fire1');
     if(Object.keys(localStorage).length > 0) {
         console.log('fire2');
-        currentList = JSON.parse(localStorage.getItem('currentList'));
+        logic.writeOverCurrentList(JSON.parse(localStorage.getItem('currentList')));
         lists = JSON.parse(localStorage.getItem('lists'));
         nextListId = JSON.parse(localStorage.getItem('nextListId'));
     }

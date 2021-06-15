@@ -48,17 +48,21 @@ class Logic {
         if (Object.keys(lists).length === 0) {
             const chores = new List('Chores', nextListId++);
             lists.Chores = chores;
-            this.setCurrentList('Chores');
+            this.makeCurrentList('Chores');
         } 
     }
 
-    setCurrentList(listName) {
+    makeCurrentList(listName) {
         currentList = lists[listName];
+    }
+
+    writeOverCurrentList(dataFromStorage) {
+        currentList = dataFromStorage;
     }
 
     setCurrentListToARemainingList() {
         const firstList = Object.keys(lists)[0];
-        this.setCurrentList(firstList);
+        this.makeCurrentList(firstList);
     }
 
     deleteList(listName) {

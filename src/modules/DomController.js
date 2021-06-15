@@ -202,7 +202,7 @@ class DomController {
         listItem.innerHTML = html;
     }
     changeListHandler(listName) {
-        logic.setCurrentList(listName);
+        logic.makeCurrentList(listName);
         this.renderTasks();
         const columnName = document.querySelector('.list-column-name');
         columnName.textContent = listName;
