@@ -97,49 +97,70 @@ class DomController {
                 e.preventDefault();
                 this.viewOnlyToday();
             }
+            if(target.className === 'menu-btn week') {
+                e.preventDefault();
+                this.viewOnlyWeek();
+            }
         }
+    }
+
+    viewOnlyWeek() {
+        const ulForTasks = document.querySelector('.the-task-items');
+        ulForTasks.innerHTML = '';
+        for (const task of Object.values(currentList.tasks).filter(task => {
+            const dueDateObj = new Date(task.dueDate);
+
+            if (Math.abs(Date.now() - dueDateObj) <= 6.048e8) {
+                return true;
+            } else return false;
+        })) {
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
+            ulForTasks.innerHTML += html;
+        }
+    }
+
+    createTaskHTML(taskId, name, dueDate) {
+        const html = `<li class="todo-item" data-id="${taskId}">
+        <div class="task-date-btns">
+            <span class="task">${name}</span>
+            <div class="date-and-btns">
+                <span class="due-date">${this.createReadableDate(dueDate)}</span>
+                <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
+
+            </div>
+        </div>
+    <div class="task-editor hidden">
+                    <form action="" method="get" class="task-editor-form">
+                        <input class="task-field" name="task" type="text" placeholder="Task" />
+                        <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                        <div class="datepicker-addbutton">
+                            <input class="date-picker" name="due-date" type="date" required />
+                            <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
+                            <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </li>`;
+        return html;
     }
 
     viewOnlyToday() {
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks).filter(task => {
-            console.log(task.dueDate);
             const dueDateObj = new Date(task.dueDate);
-            const dueDateDay = dueDateObj.getDate();
-            const dueDateMonth = dueDateObj.getMonth();
-            const dueDateYear = dueDateObj.getFullYear();
-            const currentDay = new Date().getDate();
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-
-            console.log({dueDateDay, currentDay});
+            const dueDateDay = dueDateObj.getUTCDate();
+            const dueDateMonth = dueDateObj.getUTCMonth();
+            const dueDateYear = dueDateObj.getUTCFullYear();
+            const currentDay = new Date().getUTCDate();
+            const currentMonth = new Date().getUTCMonth();
+            const currentYear = new Date().getUTCFullYear();
 
             if (dueDateDay === currentDay && dueDateMonth === currentMonth && dueDateYear === currentYear) {
                 return true;
             } else return false;
         })) {
-            const html = `<li class="todo-item" data-id="${task.taskId}">
-            <div class="task-date-btns">
-                <span class="task">${task.name}</span>
-                <div class="date-and-btns">
-                    <span class="due-date">${this.createReadableDate(task.dueDate)}</span>
-                    <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
-
-                </div>
-            </div>
-        <div class="task-editor hidden">
-                        <form action="" method="get" class="task-editor-form">
-                            <input class="task-field" name="task" type="text" placeholder="Task" />
-                            <textarea class="description-field" name="description" placeholder="Details"></textarea>
-                            <div class="datepicker-addbutton">
-                                <input class="date-picker" name="due-date" type="date" required />
-                                <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
-                                <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </li>`;
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
             ulForTasks.innerHTML += html;
         }
     }
@@ -269,7 +290,6 @@ class DomController {
             const currentTime = Date.now(); //will use currentTime as a unique identifier for each task
 
             if(taskIsNew) {
-                console.log(dueDate);
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
                 logic.addTaskToCurrentList(task);
                 this.renderTasks();
@@ -306,27 +326,7 @@ class DomController {
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks)) {
-            const html = `<li class="todo-item" data-id="${task.taskId}">
-            <div class="task-date-btns">
-                <span class="task">${task.name}</span>
-                <div class="date-and-btns">
-                    <span class="due-date">${this.createReadableDate(task.dueDate)}</span>
-                    <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
-
-                </div>
-            </div>
-        <div class="task-editor hidden">
-                        <form action="" method="get" class="task-editor-form">
-                            <input class="task-field" name="task" type="text" placeholder="Task" />
-                            <textarea class="description-field" name="description" placeholder="Details"></textarea>
-                            <div class="datepicker-addbutton">
-                                <input class="date-picker" name="due-date" type="date" required />
-                                <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
-                                <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </li>`;
+            const html = this.createTaskHTML(task.id, task.name, task.dueDate);
             ulForTasks.innerHTML += html;
         }
     }

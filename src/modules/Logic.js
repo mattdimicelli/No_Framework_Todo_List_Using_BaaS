@@ -32,10 +32,6 @@ class Logic {
         delete currentList.tasks[task];
     }
 
-     // getCurrentTask() {
-    //     return currentTask;
-    // }
-
     createNewList(name) {
         const newList = new List(name, nextListId++);
         lists[name] = newList;
@@ -45,7 +41,6 @@ class Logic {
         lists[newName] = lists[oldName];
         delete lists[oldName];
         lists[newName].name = newName;
-        console.log(lists);
     }
 
     
@@ -70,13 +65,10 @@ class Logic {
         delete lists[listName];
     }
 
-    // getCurrentList() {
-    //     return currentList;
-    // }
 
    
 }
 
 const logic = new Logic();
 
-export {currentList, lists, logic};
+export {currentList, lists, logic, nextListId};
