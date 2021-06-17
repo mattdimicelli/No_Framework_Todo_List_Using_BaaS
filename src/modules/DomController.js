@@ -46,9 +46,9 @@ class DomController {
                 e.preventDefault();
                 this.renderLists();
             }
-            if(target.className === 'far fa-trash-alt') {
+            if(target.className === 'far fa-trash-alt list') {
                 e.preventDefault();
-                this.deleteListBtnHandler();
+                this.deleteListHandler();
             }
         }
 
@@ -61,7 +61,7 @@ class DomController {
             }
             if(target.className === 'edit-task-btn') {
                 const taskEditor = target.parentElement.parentElement.parentElement.children[1];
-                const taskId = target.parentElement.parentElement.parentElement.dataset.id;
+                const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
                 this.taskEditorHandler(taskEditor, taskId);
             }
             if(target.className === 'edit-task-submit-btn') {
@@ -89,6 +89,104 @@ class DomController {
                 const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
             }
+            if(target.className === 'menu-btn all') {
+                e.preventDefault();
+                this.renderTasks();
+            }
+            if(target.className === 'menu-btn today') {
+                e.preventDefault();
+                this.viewOnlyToday();
+            }
+            if(target.className === 'menu-btn week') {
+                e.preventDefault();
+                this.viewOnlyWeek();
+            }
+        }
+    }
+
+    viewOnlyWeek() {
+        const ulForTasks = document.querySelector('.the-task-items');
+        ulForTasks.innerHTML = '';
+        for (const task of Object.values(currentList.tasks).filter(task => {
+            const dueDateObj = new Date(task.dueDate);
+
+            if (Math.abs(Date.now() - dueDateObj) <= 6.048e8) {
+                return true;
+            } else return false;
+        })) {
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
+            ulForTasks.innerHTML += html;
+        }
+    }
+
+    createTaskHTML(taskId, name, dueDate) {
+        const html = `<li class="todo-item" data-id="${taskId}">
+        <div class="task-date-btns">
+            <span class="task">${name}</span>
+            <div class="date-and-btns">
+                <span class="due-date">${this.createReadableDate(dueDate)}</span>
+                <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
+
+            </div>
+        </div>
+    <div class="task-editor hidden">
+                    <form action="" method="get" class="task-editor-form">
+                        <input class="task-field" name="task" type="text" placeholder="Task" />
+                        <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                        <div class="datepicker-addbutton">
+                            <input class="date-picker" name="due-date" type="date" required />
+                            <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
+                            <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </li>`;
+        return html;
+    }
+
+    viewOnlyToday() {
+        const ulForTasks = document.querySelector('.the-task-items');
+        ulForTasks.innerHTML = '';
+        for (const task of Object.values(currentList.tasks).filter(task => {
+            const dueDateObj = new Date(task.dueDate);
+            const dueDateDay = dueDateObj.getUTCDate();
+            const dueDateMonth = dueDateObj.getUTCMonth();
+            const dueDateYear = dueDateObj.getUTCFullYear();
+            const currentDay = new Date().getUTCDate();
+            const currentMonth = new Date().getUTCMonth();
+            const currentYear = new Date().getUTCFullYear();
+
+            if (dueDateDay === currentDay && dueDateMonth === currentMonth && dueDateYear === currentYear) {
+                return true;
+            } else return false;
+        })) {
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
+            ulForTasks.innerHTML += html;
+        }
+    }
+
+    updateColumnName() {
+        const columnName = document.querySelector('.list-column-name');
+        columnName.textContent = currentList.name;
+    }
+
+ 
+
+    deleteListHandler() {
+        const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all associated tasks?`);
+        if(reallyDelete) {
+            if(Object.keys(lists).length > 1) {
+                logic.deleteList(oldName);
+                logic.setCurrentListToARemainingList();
+                this.renderLists();
+                this.renderTasks();
+                this.updateColumnName();
+            } else {
+                alert('Unable to delete your only list!');
+                this.renderLists();
+            }
+        } else {
+            this.renderLists();
         }
     }
 
@@ -118,12 +216,12 @@ class DomController {
 
     editListIconHandler(listName, listItem) {
         oldName = listName;
-        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt list"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
     }
 
     changeListHandler(listName) {
-        logic.setCurrentyList(listName);
+        logic.makeCurrentList(listName);
         this.renderTasks();
         const columnName = document.querySelector('.list-column-name');
         columnName.textContent = listName;
@@ -149,7 +247,6 @@ class DomController {
             if (list1.id === list2.id) return 0;
             if (list1.id < list2.id) return -1;
         }); 
-        console.log(sortedLists);
         for (const list of sortedLists) {
             html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
         }
@@ -187,8 +284,9 @@ class DomController {
         const taskTextInput = taskEditor.firstElementChild.firstElementChild;
         const detailsTextarea = taskEditor.firstElementChild.firstElementChild.nextElementSibling;
         const datepicker = taskEditor.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild;
-
+    
         taskTextInput.value = currentList.tasks[taskId].name;
+     
         detailsTextarea.value = currentList.tasks[taskId].details;
         datepicker.valueAsNumber = currentList.tasks[taskId].dueDate;
     }
@@ -197,7 +295,7 @@ class DomController {
         
         const taskName = target.parentElement.parentElement.children[0].value;
         const details = target.parentElement.parentElement.children[1].value;
-        const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsNumber;
+        const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsDate;
 
         if(!this.dueDateIsValid(dueDate)){
             target.parentElement.parentElement.children[2].firstElementChild.focus();
@@ -213,7 +311,7 @@ class DomController {
 
             if(taskIsNew) {
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
-                logic.addTaskToCurrentList(task);
+                logic.addTaskToCurrentList(task); //here?
                 this.renderTasks();
             }
             if(!taskIsNew) {
@@ -249,27 +347,7 @@ class DomController {
         ulForTasks.innerHTML = '';
         if(currentList === null) ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks)) {
-            const html = `<li class="todo-item" data-id="${task.taskId}">
-            <div class="task-date-btns">
-                <span class="task">${task.name}</span>
-                <div class="date-and-btns">
-                    <span class="due-date">${this.createReadableDate(task.dueDate)}</span>
-                    <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
-
-                </div>
-            </div>
-        <div class="task-editor hidden">
-                        <form action="" method="get" class="task-editor-form">
-                            <input class="task-field" name="task" type="text" placeholder="Task" />
-                            <textarea class="description-field" name="description" placeholder="Details"></textarea>
-                            <div class="datepicker-addbutton">
-                                <input class="date-picker" name="due-date" type="date" required />
-                                <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
-                                <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </li>`;
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate); //here
             ulForTasks.innerHTML += html;
         }
     }

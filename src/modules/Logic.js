@@ -1,10 +1,12 @@
 import {Task} from './Task';
 import {List} from './List';
+import { domController } from './DomController';
 
 let currentList;
 let nextListId = 0;
 
-const lists = {};
+let lists = {};
+
 
 class Logic {
     constructor() {}
@@ -32,7 +34,6 @@ class Logic {
         delete currentList.tasks[task];
     }
 
-
     createNewList(name) {
         const newList = new List(name, nextListId++);
         lists[name] = newList;
@@ -42,7 +43,6 @@ class Logic {
         lists[newName] = lists[oldName];
         delete lists[oldName];
         lists[newName].name = newName;
-        console.log(lists);
     }
 
     
@@ -50,23 +50,26 @@ class Logic {
         if (Object.keys(lists).length === 0) {
             const chores = new List('Chores', nextListId++);
             lists.Chores = chores;
-            this.setCurrentyList('Chores');
+            this.makeCurrentList('Chores');
         } 
     }
 
-    setCurrentyList(listName) {
-        if (listName === null) { 
-            currentList = null;   
-        } else {
-            currentList = lists[listName];
-        }
+    makeCurrentList(listName) {
+        currentList = lists[listName];
     }
 
-    setNextListAsCurrent() {
+    writeOverCurrentList(dataFromStorage) {
+        currentList = dataFromStorage;
+    }
+
+    setCurrentListToARemainingList() {
         const firstList = Object.keys(lists)[0];
-        currentList = lists[firstList];
+        this.makeCurrentList(firstList);
     }
 
+    deleteList(listName) {
+        delete lists[listName];
+    }
 
 
    
@@ -74,5 +77,29 @@ class Logic {
 
 const logic = new Logic();
 
+    
 
-export {currentList, lists, logic};
+
+window.addEventListener('beforeunload', function() {
+    localStorage.setItem('currentList', JSON.stringify(currentList));
+    localStorage.setItem('lists', JSON.stringify(lists));
+    localStorage.setItem('nextListId', JSON.stringify(nextListId));
+})
+
+document.addEventListener('DOMContentLoaded', function() {
+    if(Object.keys(localStorage).length > 0) {
+            console.log('theres stuff in local storage');
+            logic.writeOverCurrentList(JSON.parse(localStorage.getItem('currentList')));
+            lists = JSON.parse(localStorage.getItem('lists'));
+            nextListId = JSON.parse(localStorage.getItem('nextListId'));
+            domController.renderLists();
+            domController.renderTasks();
+            domController.updateColumnName();
+    } else {
+        console.log('nothing in local storage');
+        logic.setDefaultList();
+    }
+})
+
+
+export {currentList, lists, logic, nextListId};
