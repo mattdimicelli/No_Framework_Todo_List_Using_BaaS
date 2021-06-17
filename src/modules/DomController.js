@@ -51,6 +51,12 @@ class DomController {
                 this.deleteListHandler();
             }
         }
+        
+        if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
+            const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
+            const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
+            this.toggleStrikethruTask(taskTarget, dateTarget);
+        }
 
         target = e.target.closest('button, li');
 
@@ -102,6 +108,11 @@ class DomController {
                 this.viewOnlyWeek();
             }
         }
+    }
+
+    toggleStrikethruTask(taskTarget, dateTarget) {
+        taskTarget.classList.toggle('strikethru');
+        dateTarget.classList.toggle('strikethru');
     }
 
     viewOnlyWeek() {
