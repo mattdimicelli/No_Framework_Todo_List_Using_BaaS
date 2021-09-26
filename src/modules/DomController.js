@@ -12,28 +12,38 @@ class DomController {
     }
     
     handleClick(e) {
+        /* writing this application was a learning process.  I attempted and
+            succeeded in using one event listener with delegation for every
+            click on the DOM.  doing so required a complex set of conditionals.*/ 
+        
+        // the following variable is declared for use in conditional statements
         let target;
-
-        if(e.target.closest('i')) {
+        if(e.target.closest('button, li')) {
+            target = e.target.closest('button, li');
+            if(target.className === 'edit-task-btn') {
+                const taskEditor = target.parentElement.parentElement.parentElement.children[1];
+                const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
+                this.taskEditorHandler(taskEditor, taskId);
+            }
+        }
+        e.preventDefault();
+        if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
+            const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
+            const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
+            this.toggleStrikethruTask(taskTarget, dateTarget);
+        } else if(e.target.closest('i')) {
             target = e.target.closest('i');
             if(target.classList.contains('new-list-cancel-btn')) {
-                e.preventDefault();
                 target.parentElement.remove();
-            }
-            if(target.classList.contains('new-list-submit-btn')) {
-                e.preventDefault();
+            } else if(target.classList.contains('new-list-submit-btn')) {
                 const listTextInput = target.previousElementSibling.previousElementSibling;
                 const listName = target.previousElementSibling.previousElementSibling.value;
                 this.newListSubmitBtnHandler(target, listName, listTextInput);
-            }
-            if(target.classList.contains('edit-list-icon')) {
-                e.preventDefault();
+            } else if(target.classList.contains('edit-list-icon')) {
                 const listItem = target.parentElement.parentElement;
                 const listName = target.parentElement.parentElement.textContent;
                 this.editListIconHandler(listName, listItem); 
-            }
-            if(target.classList.contains('edit-list-submit-btn')) {
-                e.preventDefault();
+            } else if(target.classList.contains('edit-list-submit-btn')) {
                 const textInput = target.previousElementSibling.previousElementSibling.previousElementSibling;
                 const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
                 if(newName === oldName) {
@@ -41,72 +51,47 @@ class DomController {
                      return;
                 }
                 this.editListSubmitBtnHandler(newName, textInput);
-            }
-            if(target.classList.contains('edit-list-cancel-btn')) {
-                e.preventDefault();
+            } else if(target.classList.contains('edit-list-cancel-btn')) {
                 this.renderLists();
-            }
-            if(target.className === 'far fa-trash-alt list') {
-                e.preventDefault();
+            } else if(target.className === 'far fa-trash-alt list') {
                 this.deleteListHandler();
+            } else if(e.target.closest('button, li')) {
+                target = e.target.closest('button, li');
+                if(target.className === 'menu-btn') {
+                    const menu = document.querySelector('.menu');
+                    this.menuBtnHandler(menu);
+                } 
+                else if(target.className === 'edit-task-submit-btn') {
+                    this.editTaskSubmitBtnHandler(target);
+                } else if(target.className === 'new-task-btn') {
+                    const newTaskEditor = target.previousElementSibling;
+                    this.newTaskBtnHandler(newTaskEditor);
+                } else if(target.className === 'task-delete-btn') {
+                    this.taskDeleteBtnHandler(target);
+                } else if(target.className === 'cancel-new-task-btn') {
+                    const newTaskEditor = target.parentElement.parentElement.parentElement;
+                    this.cancelNewTaskBtnHandler(newTaskEditor);
+                } else if(target.classList.contains('add-list-btn')) {
+                    this.addListBtnHandler();
+                } 
             }
-        }
-        
-        if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
-            const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
-            const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
-            this.toggleStrikethruTask(taskTarget, dateTarget);
-        }
-
-        target = e.target.closest('button, li');
-
-        if(target) {
-            if(target.className === 'menu-btn') {
-                const menu = document.querySelector('.menu');
-                this.menuBtnHandler(menu);
-            }
-            if(target.className === 'edit-task-btn') {
-                const taskEditor = target.parentElement.parentElement.parentElement.children[1];
-                const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
-                this.taskEditorHandler(taskEditor, taskId);
-            }
-            if(target.className === 'edit-task-submit-btn') {
-                e.preventDefault();
-                this.editTaskSubmitBtnHandler(target);
-            }
+        } else {
+            target = e.target.closest('button, li');
             if(target.className === 'new-task-btn') {
                 const newTaskEditor = target.previousElementSibling;
                 this.newTaskBtnHandler(newTaskEditor);
-            }
-            if(target.className === 'task-delete-btn') {
-                e.preventDefault();
-                this.taskDeleteBtnHandler(target);
-            }
-            if(target.className === 'cancel-new-task-btn') {
-                e.preventDefault();
-                const newTaskEditor = target.parentElement.parentElement.parentElement;
-                this.cancelNewTaskBtnHandler(newTaskEditor);
-            }
-            if(target.classList.contains('add-list-btn')) {
-                e.preventDefault();
+            } else if(target.classList.contains('add-list-btn')) {
                 this.addListBtnHandler();
-            } 
-            if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
+            } else if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
                 const listName = target.childNodes[1].textContent;
                 this.changeListHandler(listName);
-            }
-            if(target.className === 'menu-btn all') {
-                e.preventDefault();
+            } else if(target.className === 'menu-btn all') {
                 this.renderTasks();
-            }
-            if(target.className === 'menu-btn today') {
-                e.preventDefault();
+            } else if(target.className === 'menu-btn today') {
                 this.viewOnlyToday();
-            }
-            if(target.className === 'menu-btn week') {
-                e.preventDefault();
+            } else if(target.className === 'menu-btn week') {
                 this.viewOnlyWeek();
-            }
+            } 
         }
     }
 
