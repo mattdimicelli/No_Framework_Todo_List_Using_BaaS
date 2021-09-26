@@ -5,7 +5,10 @@ let oldName;
 
 class DomController {
 
-    constructor()  {}
+    constructor()  {
+        this.oldName = null;
+        this.listCurrentlyBeingEdited = false;
+    }
 
     initializeClickEventListeners() {
         document.addEventListener('click', this.handleClick.bind(this));
@@ -18,6 +21,9 @@ class DomController {
         
         // the following variable is declared for use in conditional statements
         let target;
+
+        /*the taskEditorHandler() uses a date-picker element, so e.preventDefault()
+        cannot be used with it*/
         if(e.target.closest('button, li')) {
             target = e.target.closest('button, li');
             if(target.className === 'edit-task-btn') {
@@ -26,8 +32,11 @@ class DomController {
                 this.taskEditorHandler(taskEditor, taskId);
             }
         }
+
         e.preventDefault();
+        
         if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
+            //strikes thru the name of the task and the due date if either one clicked on
             const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
             const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
             this.toggleStrikethruTask(taskTarget, dateTarget);
@@ -44,6 +53,8 @@ class DomController {
                 const listName = target.parentElement.parentElement.textContent;
                 this.editListIconHandler(listName, listItem); 
             } else if(target.classList.contains('edit-list-submit-btn')) {
+                /* this btn is identical to the 'new-list-submit-btn', but 
+                substitutes it when an existing list is currently being edited */
                 const textInput = target.previousElementSibling.previousElementSibling.previousElementSibling;
                 const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
                 if(newName === oldName) {
@@ -52,6 +63,7 @@ class DomController {
                 }
                 this.editListSubmitBtnHandler(newName, textInput);
             } else if(target.classList.contains('edit-list-cancel-btn')) {
+                this.listCurrentlyBeingEdited = false;
                 this.renderLists();
             } else if(target.className === 'far fa-trash-alt list') {
                 this.deleteListHandler();
@@ -169,6 +181,7 @@ class DomController {
  
 
     deleteListHandler() {
+        this.listCurrentlyBeingEdited = false;
         const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all associated tasks?`);
         if(reallyDelete) {
             if(Object.keys(lists).length > 1) {
@@ -205,12 +218,17 @@ class DomController {
             textInput.focus();
             return;
         }
+        this.listCurrentlyBeingEdited = false;
         logic.modifyListName(oldName, newName);
         this.renderLists();
         this.changeListHandler(newName);
     }
 
     editListIconHandler(listName, listItem) {
+        /* if another list is being editted, won't allow another to be editted
+        until the first one is finished */
+        if (this.listCurrentlyBeingEdited) return;
+        this.listCurrentlyBeingEdited = true;
         oldName = listName;
         const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt list"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
