@@ -1,8 +1,5 @@
 import { logic, currentList, lists} from './Logic';
 
-let oldName;
-
-
 class DomController {
 
     constructor()  {
@@ -24,16 +21,8 @@ class DomController {
 
         /*the taskEditorHandler() uses a date-picker element, so e.preventDefault()
         cannot be used with it*/
-        if(e.target.closest('button, li')) {
-            target = e.target.closest('button, li');
-            if(target.className === 'edit-task-btn') {
-                const taskEditor = target.parentElement.parentElement.parentElement.children[1];
-                const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
-                this.taskEditorHandler(taskEditor, taskId);
-            }
-        }
-
-        e.preventDefault();
+      
+    
         
         if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
             //strikes thru the name of the task and the due date if either one clicked on
@@ -41,6 +30,7 @@ class DomController {
             const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
             this.toggleStrikethruTask(taskTarget, dateTarget);
         } else if(e.target.closest('i')) {
+            e.preventDefault();
             target = e.target.closest('i');
             if(target.classList.contains('new-list-cancel-btn')) {
                 target.parentElement.remove();
@@ -57,7 +47,7 @@ class DomController {
                 substitutes it when an existing list is currently being edited */
                 const textInput = target.previousElementSibling.previousElementSibling.previousElementSibling;
                 const newName = target.previousElementSibling.previousElementSibling.previousElementSibling.value;
-                if(newName === oldName) {
+                if(newName === this.oldName) {
                      textInput.focus();
                      return;
                 }
@@ -72,8 +62,11 @@ class DomController {
                 if(target.className === 'menu-btn') {
                     const menu = document.querySelector('.menu');
                     this.menuBtnHandler(menu);
-                } 
-                else if(target.className === 'edit-task-submit-btn') {
+                } else if(target.className === 'edit-task-btn') {
+                    const taskEditor = target.parentElement.parentElement.parentElement.children[1];
+                    const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
+                    this.taskEditorHandler(taskEditor, taskId);
+                } else if(target.className === 'edit-task-submit-btn') {
                     this.editTaskSubmitBtnHandler(target);
                 } else if(target.className === 'new-task-btn') {
                     const newTaskEditor = target.previousElementSibling;
@@ -89,20 +82,25 @@ class DomController {
             }
         } else {
             target = e.target.closest('button, li');
-            if(target.className === 'new-task-btn') {
-                const newTaskEditor = target.previousElementSibling;
-                this.newTaskBtnHandler(newTaskEditor);
-            } else if(target.classList.contains('add-list-btn')) {
-                this.addListBtnHandler();
-            } else if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
-                const listName = target.childNodes[1].textContent;
-                this.changeListHandler(listName);
-            } else if(target.className === 'menu-btn all') {
-                this.renderTasks();
-            } else if(target.className === 'menu-btn today') {
-                this.viewOnlyToday();
-            } else if(target.className === 'menu-btn week') {
-                this.viewOnlyWeek();
+            if (target === null) {
+                return;
+            } else {
+                if(target.className === 'new-task-btn') {
+                    e.preventDefault();
+                    const newTaskEditor = target.previousElementSibling;
+                    this.newTaskBtnHandler(newTaskEditor);
+                } else if(target.classList.contains('add-list-btn')) {
+                    this.addListBtnHandler();
+                } else if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
+                    const listName = target.childNodes[1].textContent;
+                    this.changeListHandler(listName);
+                } else if(target.className === 'menu-btn all') {
+                    this.renderTasks();
+                } else if(target.className === 'menu-btn today') {
+                    this.viewOnlyToday();
+                } else if(target.className === 'menu-btn week') {
+                    this.viewOnlyWeek();
+                } 
             } 
         }
     }
@@ -182,10 +180,10 @@ class DomController {
 
     deleteListHandler() {
         this.listCurrentlyBeingEdited = false;
-        const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all associated tasks?`);
+        const reallyDelete = confirm(`Are you sure that you want to delete the ${this.oldName} list and all associated tasks?`);
         if(reallyDelete) {
             if(Object.keys(lists).length > 1) {
-                logic.deleteList(oldName);
+                logic.deleteList(this.oldName);
                 logic.setCurrentListToARemainingList();
                 this.renderLists();
                 this.renderTasks();
@@ -200,9 +198,9 @@ class DomController {
     }
 
     deleteListBtnHandler() {
-        const reallyDelete = confirm(`Are you sure that you want to delete the ${oldName} list and all of it's associated tasks?`);
+        const reallyDelete = confirm(`Are you sure that you want to delete the ${this.oldName} list and all of it's associated tasks?`);
         if(reallyDelete) {
-            delete lists[oldName];
+            delete lists[this.oldName];
             if(Object.keys(lists).length === 0) {
                 logic.setCurrentyList = null;
             } else { logic.setNextListAsCurrent();
@@ -229,7 +227,7 @@ class DomController {
         until the first one is finished */
         if (this.listCurrentlyBeingEdited) return;
         this.listCurrentlyBeingEdited = true;
-        oldName = listName;
+        this.oldName = listName;
         const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt list"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
         listItem.innerHTML = html;
     }
