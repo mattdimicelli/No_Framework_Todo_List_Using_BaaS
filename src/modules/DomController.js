@@ -5,6 +5,7 @@ class DomController {
     constructor()  {
         this.oldName = null;
         this.listCurrentlyBeingEdited = false;
+        this.taskCurrentlyBeingEdited = false;
     }
 
     initializeClickEventListeners() {
@@ -17,13 +18,7 @@ class DomController {
             click on the DOM.  doing so required a complex set of conditionals.*/ 
         
         // the following variable is declared for use in conditional statements
-        let target;
-
-        /*the taskEditorHandler() uses a date-picker element, so e.preventDefault()
-        cannot be used with it*/
-      
-    
-        
+        let target;        
         if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
             //strikes thru the name of the task and the due date if either one clicked on
             const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
@@ -56,7 +51,7 @@ class DomController {
                 this.listCurrentlyBeingEdited = false;
                 this.renderLists();
             } else if(target.className === 'far fa-trash-alt list') {
-                this.deleteListHandler();
+                this.deleteList();
             } else if(e.target.closest('button, li')) {
                 target = e.target.closest('button, li');
                 if(target.className === 'menu-btn') {
@@ -65,7 +60,7 @@ class DomController {
                 } else if(target.className === 'edit-task-btn') {
                     const taskEditor = target.parentElement.parentElement.parentElement.children[1];
                     const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
-                    this.taskEditorHandler(taskEditor, taskId);
+                    this.renderTaskEditor(taskEditor, taskId);
                 } else if(target.className === 'edit-task-submit-btn') {
                     this.editTaskSubmitBtnHandler(target);
                 } else if(target.className === 'new-task-btn') {
@@ -93,14 +88,26 @@ class DomController {
                     this.addListBtnHandler();
                 } else if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
                     const listName = target.childNodes[1].textContent;
-                    this.changeListHandler(listName);
+                    this.switchList(listName);
                 } else if(target.className === 'menu-btn all') {
+                    this.taskCurrentlyBeingEdited = false;
+                    this.listCurrentlyBeingEdited = false;
                     this.renderTasks();
                 } else if(target.className === 'menu-btn today') {
                     this.viewOnlyToday();
                 } else if(target.className === 'menu-btn week') {
                     this.viewOnlyWeek();
-                } 
+                } else if(target.className === 'edit-task-submit-btn') {
+                    e.preventDefault();
+                    this.editTaskSubmitBtnHandler(target);
+                } else if(target.className === 'task-delete-btn') {
+                    e.preventDefault();
+                    this.taskDeleteBtnHandler(target);
+                } else if(target.className === 'cancel-new-task-btn') {
+                    e.preventDefault();
+                    const newTaskEditor = target.parentElement.parentElement.parentElement;
+                    this.cancelNewTaskBtnHandler(newTaskEditor);
+                }
             } 
         }
     }
@@ -111,15 +118,17 @@ class DomController {
     }
 
     viewOnlyWeek() {
+        this.taskCurrentlyBeingEdited = false;
+        this.listCurrentlyBeingEdited = false;
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
-        for (const task of Object.values(currentList.tasks).filter(task => {
+        const tasksOfWeek = Object.values(currentList.tasks).filter(task => {
             const dueDateObj = new Date(task.dueDate);
-
             if (Math.abs(Date.now() - dueDateObj) <= 6.048e8) {
                 return true;
             } else return false;
-        })) {
+        });
+        for (const task of tasksOfWeek) {
             const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
             ulForTasks.innerHTML += html;
         }
@@ -151,9 +160,11 @@ class DomController {
     }
 
     viewOnlyToday() {
+        this.taskCurrentlyBeingEdited = false;
+        this.listCurrentlyBeingEdited = false;
         const ulForTasks = document.querySelector('.the-task-items');
         ulForTasks.innerHTML = '';
-        for (const task of Object.values(currentList.tasks).filter(task => {
+        const tasksOfToday = Object.values(currentList.tasks).filter(task => {
             const dueDateObj = new Date(task.dueDate);
             const dueDateDay = dueDateObj.getUTCDate();
             const dueDateMonth = dueDateObj.getUTCMonth();
@@ -161,11 +172,11 @@ class DomController {
             const currentDay = new Date().getUTCDate();
             const currentMonth = new Date().getUTCMonth();
             const currentYear = new Date().getUTCFullYear();
-
             if (dueDateDay === currentDay && dueDateMonth === currentMonth && dueDateYear === currentYear) {
                 return true;
             } else return false;
-        })) {
+        });
+        for (const task of tasksOfToday) {
             const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
             ulForTasks.innerHTML += html;
         }
@@ -176,15 +187,14 @@ class DomController {
         columnName.textContent = currentList.name;
     }
 
- 
-
-    deleteListHandler() {
+    deleteList() {
         this.listCurrentlyBeingEdited = false;
+        this.taskCurrentlyBeingEdited = false;
         const reallyDelete = confirm(`Are you sure that you want to delete the ${this.oldName} list and all associated tasks?`);
         if(reallyDelete) {
             if(Object.keys(lists).length > 1) {
                 logic.deleteList(this.oldName);
-                logic.setCurrentListToARemainingList();
+                logic.setCurrentListToBeOneOfTheRemainingLists();
                 this.renderLists();
                 this.renderTasks();
                 this.updateColumnName();
@@ -197,33 +207,20 @@ class DomController {
         }
     }
 
-    deleteListBtnHandler() {
-        const reallyDelete = confirm(`Are you sure that you want to delete the ${this.oldName} list and all of it's associated tasks?`);
-        if(reallyDelete) {
-            delete lists[this.oldName];
-            if(Object.keys(lists).length === 0) {
-                logic.setCurrentyList = null;
-            } else { logic.setNextListAsCurrent();
-            }
-            this.renderLists();
-            this.renderTasks();   
-        } else this.renderLists();
-
-    }
-
     editListSubmitBtnHandler(newName, textInput) {
         if(newName === '') {
+            // don't allow user to save list without name
             textInput.focus();
             return;
         }
         this.listCurrentlyBeingEdited = false;
-        logic.modifyListName(oldName, newName);
+        logic.modifyListName(this.oldName, newName);
         this.renderLists();
-        this.changeListHandler(newName);
+        this.switchList(newName);
     }
 
     editListIconHandler(listName, listItem) {
-        /* if another list is being editted, won't allow another to be editted
+        /* if another list is being edited, won't allow another to be edited
         until the first one is finished */
         if (this.listCurrentlyBeingEdited) return;
         this.listCurrentlyBeingEdited = true;
@@ -232,23 +229,25 @@ class DomController {
         listItem.innerHTML = html;
     }
 
-    changeListHandler(listName) {
+    switchList(listName) {
+        this.taskCurrentlyBeingEdited = false;
+        this.listCurrentlyBeingEdited = false;
         logic.makeCurrentList(listName);
         this.renderTasks();
         const columnName = document.querySelector('.list-column-name');
         columnName.textContent = listName;
     }
 
-
     newListSubmitBtnHandler(target, listName, listTextInput) {
         if(listName === '') {
+            // don't allow user to save list without name
             listTextInput.focus();
             return;
         }
         logic.createNewList(listName);
         target.parentElement.remove();
         this.renderLists();
-        this.changeListHandler(listName);
+        this.switchList(listName);
     }
 
     renderLists() {
@@ -260,14 +259,13 @@ class DomController {
             if (list1.id < list2.id) return -1;
         }); 
         for (const list of sortedLists) {
-            html += `<li class="list menu-btn"><i class="fas fa-list-alt edit-list-icon"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
+            html += `<li class="list menu-btn"><i class="fas fa-list-alt"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
         }
         ul.innerHTML = html;
     }
 
     menuBtnHandler(menu) {
-        const display = window.getComputedStyle(menu).display;
-        if(display === 'none'){
+        if(window.getComputedStyle(menu).display === 'none'){
             menu.style.display = 'block';
         }
         else menu.style.display = 'none';
@@ -286,12 +284,16 @@ class DomController {
     }
 
     taskDeleteBtnHandler(target) {
+        this.taskCurrentlyBeingEdited = false;
         const taskId = target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         logic.deleteTask(taskId);
         this.renderTasks();
     }
 
-    taskEditorHandler(taskEditor, taskId) {
+    renderTaskEditor(taskEditor, taskId) {
+        // if a task editor window is already open, do nothing 
+        if(this.taskCurrentlyBeingEdited) return;
+        this.taskCurrentlyBeingEdited = true;
         taskEditor.classList.toggle('hidden');
         const taskTextInput = taskEditor.firstElementChild.firstElementChild;
         const detailsTextarea = taskEditor.firstElementChild.firstElementChild.nextElementSibling;
@@ -300,7 +302,9 @@ class DomController {
         taskTextInput.value = currentList.tasks[taskId].name;
      
         detailsTextarea.value = currentList.tasks[taskId].details;
-        datepicker.valueAsNumber = currentList.tasks[taskId].dueDate;
+        if(currentList.tasks[taskId].dueDate) {
+            datepicker.valueAsNumber = currentList.tasks[taskId].dueDate;
+        }   
     }
 
     editTaskSubmitBtnHandler(target) {
@@ -310,40 +314,37 @@ class DomController {
         const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsDate;
 
         if(!this.dueDateIsValid(dueDate)){
+            // if the date is not valid, bring the date picker into focus
             target.parentElement.parentElement.children[2].firstElementChild.focus();
-        }
-
-        if(!taskName) {
+        } else if(!taskName) {
+            // don't allow user to save task without name
             target.parentElement.parentElement.children[0].focus();
-        }
-
-        if(taskName && this.dueDateIsValid(dueDate)) {
-            const taskIsNew = (target.parentElement.parentElement.parentElement.className === 'new-task-editor') ? true : false;
+        } else if(taskName && this.dueDateIsValid(dueDate)) {
+            const taskEditor = target.parentElement.parentElement.parentElement;
+            const taskIsNew = (taskEditor.className === 'new-task-editor') ? true : false;
             const currentTime = Date.now(); //will use currentTime as a unique identifier for each task
 
             if(taskIsNew) {
                 const task = logic.createNewTask(taskName, dueDate, details, currentTime);
-                logic.addTaskToCurrentList(task); //here?
+                logic.addTaskToCurrentList(task); 
                 this.renderTasks();
-            }
-            if(!taskIsNew) {
+                taskEditor.firstElementChild.firstElementChild.value = '';
+                taskEditor.firstElementChild.children[1].value = '';
+                taskEditor.firstElementChild.children[2].firstElementChild.value = '';
+                taskEditor.classList.toggle('hidden');
+            } else if(!taskIsNew) {
                 const taskId = target.parentElement.parentElement.parentElement.parentElement.dataset.id;
                 logic.modifyTask(taskName, dueDate, details, taskId);
                 this.renderTasks();
             }
-            const taskEditor = target.parentElement.parentElement.parentElement;
-            if(taskEditor.className === 'new-task-editor') {
-                    taskEditor.firstElementChild.firstElementChild.value = '';
-                    taskEditor.firstElementChild.children[1].value = '';
-                    taskEditor.firstElementChild.children[2].firstElementChild.value = '';
-                taskEditor.classList.toggle('hidden');
-            }
         }
+        this.taskCurrentlyBeingEdited = false;
     }
 
     dueDateIsValid(dueDateValueAsNumber) {
-        if(isNaN(dueDateValueAsNumber)) return false;
-        return true;
+        if(isNaN(dueDateValueAsNumber)) {
+            return false;
+        } else return true;
     }
 
     cancelNewTaskBtnHandler(newTaskEditor) {
@@ -359,12 +360,14 @@ class DomController {
         ulForTasks.innerHTML = '';
         if(currentList === null) ulForTasks.innerHTML = '';
         for (const task of Object.values(currentList.tasks)) {
-            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate); //here
+            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate); 
             ulForTasks.innerHTML += html;
         }
     }
 
     createReadableDate(dateValueAsNumber) {
+        // if the user didn't put a due date, just return an empty str
+        if(dateValueAsNumber === null) return '';
         const date = new Date(dateValueAsNumber);
         const month = date.getUTCMonth() + 1;
         const day = date.getUTCDate();
