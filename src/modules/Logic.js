@@ -1,7 +1,9 @@
 import { Task } from './Task';
 import { List } from './List';
 import { domController } from './DomController';
-import { loadFromFirestore, updateDB } from './Firestore';
+import { updateDB, db } from './Firestore';
+import { getDoc, doc } from "firebase/firestore";
+
 
 let currentList;
 let nextListId = 0;
@@ -79,6 +81,27 @@ class Logic {
 }
 
 const logic = new Logic();
+
+async function loadFromFirestore() {
+    const docRef = doc(db, "data", "datadoc");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        console.log("there's stuff in the Firestore");
+        const data = docSnap.data();
+        logic.writeOverCurrentList(JSON.parse(data.currentList));
+        lists = JSON.parse(data.lists);
+        nextListId = JSON.parse(data.nextListId);
+        domController.renderLists();
+        domController.renderTasks();
+        domController.updateColumnName();
+    } else {
+        console.log('nothing in Firestore');
+        logic.setDefaultList();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadFromFirestore);
     
 
 export {currentList, lists, logic, nextListId};

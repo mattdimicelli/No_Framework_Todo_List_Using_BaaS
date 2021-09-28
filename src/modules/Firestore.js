@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, getDoc, enableIndexedDbPersistence } from "firebase/firestore";
-import { currentList, lists, logic, nextListId } from './Logic';
+import { getFirestore, doc, setDoc, enableIndexedDbPersistence } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -44,26 +43,4 @@ async function updateDB() {
 }
 
 
-async function loadFromFirestore() {
-    const docRef = doc(db, "data", "datadoc");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        console.log("there's stuff in the Firestore");
-        const data = docSnap.data();
-        logic.writeOverCurrentList(JSON.parse(data.currentList));
-        lists = JSON.parse(data.lists);
-        nextListId = JSON.parse(data.nextListId);
-        domController.renderLists();
-        domController.renderTasks();
-        domController.updateColumnName();
-    } else {
-        console.log('nothing in Firestore');
-        logic.setDefaultList();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadFromFirestore);
-
-
-export { updateDB, loadFromFirestore };
+export { updateDB, db };
