@@ -374,6 +374,12 @@ class DomController {
         const year = date.getUTCFullYear();
         return `${month}/${day}/${year}`;
     }
+
+    renderDataFromFirestore() {
+        domController.renderLists();
+        domController.renderTasks();
+        domController.updateColumnName();
+    }
 }
 
 export const domController = new DomController();

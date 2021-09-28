@@ -29,7 +29,7 @@ enableIndexedDbPersistence(db)
   });
 // Subsequent queries will use persistence, if it was enabled successfully
 
-async function updateDB() {
+async function updateFirestoreDB() {
     try {
         await setDoc(doc(db, "data", "datadoc"), {
           currentList: JSON.stringify(currentList),
@@ -43,4 +43,4 @@ async function updateDB() {
 }
 
 
-export { updateDB, db };
+export { updateFirestoreDB, db };
