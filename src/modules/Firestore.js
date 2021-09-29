@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, enableIndexedDbPersistence } from "firebase/firestore";
+import { currentList, lists, nextListId } from './Logic';
 
 
 const firebaseConfig = {
