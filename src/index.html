@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do..</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/5f90c49f7d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <h1><i class="fas fa-check-circle"></i>To-Do..</h1>
+        <button class="menu-btn"><i class="fas fa-grip-horizontal"></i></button>
+    </header>
+    <div class="main-container">
+        <ul class="menu">
+            <li class="menu-btn all"><i class="fas fa-globe"></i>View All</li>
+            <li class="menu-btn today"><i class="fas fa-calendar-day"></i>Today</li>
+            <li class="menu-btn week"><i class="fas fa-calendar-week"></i>Week</li>
+            <li class="list-label">Lists
+                <ul class="ul-list-of-lists">
+                    <li class="list menu-btn"><i class="fas fa-list-alt"></i>Chores<span
+                            class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>
+                </ul>
+            </li>
+            <li class="menu-btn add-list-btn"><i class="fas fa-plus"></i></i>Add List</li>
+        </ul>
+        <div class="wrapper-for-large-screens">
+            <div class="todo-list-wrapper">
+                <div class="column-names">
+                    <h2 class="list-column-name">Chores</h2>
+                    <h2 class="due-date-column-name">Due Date</h2>
+                </div>
+                <ul class="the-task-items">
+                </ul>
+            </div>
+            <div class="new-task-editor hidden">
+                <form action="" method="get" class="task-editor-form">
+                    <input class="task-field" name="task" type="text" placeholder="Task" />
+                    <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                    <div class="datepicker-addbutton">
+                        <input class="date-picker" name="due-date" type="date" />
+                        <button class="cancel-new-task-btn"><i class="far fa-times-circle"></i></button>
+                        <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                    </div>
+                </form>
+            </div>
+            <button class="new-task-btn"><i class="fas fa-plus"></i>Add Task</button>
+
+        </div>
+    </div>
+    <footer>
+        <span class="copyright">Copyright © 2021 mattdimicelli</span>
+        <a class="github-link" href="https://github.com/mattdimicelli" target="_blank"><i
+                class="fab fa-github-square"></i></a>
+
+    </footer>
+    </div>
+</body>
+
+</html>
