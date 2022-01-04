@@ -1,5 +1,5 @@
-import { Task } from './Task';
-import { List } from './List';
+import Task from './Task';
+import List from './List';
 import { domController } from './DomController';
 import { updateFirestoreDB, db } from './Firestore';
 import { getDoc, doc } from "firebase/firestore";

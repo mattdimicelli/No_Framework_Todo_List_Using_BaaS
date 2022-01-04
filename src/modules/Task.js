@@ -6,9 +6,6 @@ class Task {
         this.details = details;
         this.taskId = taskId;
     }
-
-
-
 }
 
-export { Task };
+export default Task;
