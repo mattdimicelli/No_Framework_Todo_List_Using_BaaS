@@ -14,8 +14,19 @@ class DomController {
         document.addEventListener('click', this.handleClick.bind(this));
         document.addEventListener('DOMContentLoaded', loadToDoListDataFromFirestore);
     }
-    
+
     handleClick(e) {
+        const targetName = e.target.className;
+        switch (targetName) {
+            case ('task-date-btns' || 'task'):
+                const task = e.target.closest('div[class="task-date-btns"]').firstElementChild;
+                const date = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
+                this.toggleStrikethru(task, date);
+                break;
+        }
+    }
+    
+    handleShmick(e) {
         /* writing this application was a learning process.  I attempted and
             succeeded in using one event listener with delegation for every
             click on the DOM.  doing so required a complex set of conditionals.*/ 
@@ -24,8 +35,8 @@ class DomController {
         let target;        
         if(e.target.closest('div[class="task-date-btns"]') && e.target.className !== 'fas fa-edit') {
             //strikes thru the name of the task and the due date if either one clicked on
-            const taskTarget = e.target.closest('div[class="task-date-btns"]').firstElementChild;
-            const dateTarget = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
+            const task = e.target.closest('div[class="task-date-btns"]').firstElementChild;
+            const date = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
             this.toggleStrikethru(taskTarget, dateTarget);
         } else if(e.target.closest('i')) {
             e.preventDefault();
