@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, enableIndexedDbPersistence } from "firebase/firestore";
-import { currentList, lists, nextListId } from './Logic';
+import { getFirestore, doc, setDoc, enableIndexedDbPersistence, getDoc } from "firebase/firestore";
+import domController from './DomController';
+import logic from './Logic';
+
 
 
 const firebaseConfig = {
@@ -30,18 +32,40 @@ enableIndexedDbPersistence(db)
   });
 // Subsequent queries will use persistence, if it was enabled successfully
 
-async function updateFirestoreDB() {
+async function saveToFirestoreDB(currentList, nextListId, lists) {
     try {
         await setDoc(doc(db, "data", "datadoc"), {
           currentList: JSON.stringify(currentList),
           lists: JSON.stringify(lists),
           nextListId: JSON.stringify(nextListId),
         });
-        console.log("data overwritten");
+        console.log("data saved to Firestore");
       } catch (e) {
         console.error("Error updating data in Firestore: ", e);
       }
 }
 
+async function loadToDoListDataFromFirestore() {
+  try {
+    const docRef = doc(db, "data", "datadoc");
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+        console.log("there's stuff in the Firestore");
+        let { currentList, lists, nextListId } = docSnap.data();
+        currentList = JSON.parse(currentList);
+        lists = JSON.parse(lists);
+        nextListId = JSON.parse(nextListId);
+        logic.updateData({ currentList, lists, nextListId });
+        domController.renderDataFromFirestore();
+    } else {
+        console.log('nothing in Firestore');
+        logic.setDefaultList();
+    }
+  } catch(error) {
+    console.error('Error loading data from Firestore', error);
+  }
+}
 
-export { updateFirestoreDB, db };
+
+export { saveToFirestoreDB, loadToDoListDataFromFirestore };

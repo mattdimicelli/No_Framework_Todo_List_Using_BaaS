@@ -1,110 +1,80 @@
 import Task from './Task';
 import List from './List';
-import { domController } from './DomController';
-import { updateFirestoreDB, db } from './Firestore';
-import { getDoc, doc } from "firebase/firestore";
-
-
-let currentList;
-let nextListId = 0;
-let lists = {};
-
+import { saveToFirestoreDB } from './Firestore';
 
 class Logic {
-    constructor() {}
+    constructor() {
+        this.currentList = undefined;
+        this.nextListId = 0;
+        this.lists = {};
+    }
 
     createNewTask(name, dueDate, details = "", taskId) {
         return new Task(name, dueDate, details, taskId);
     }
 
     addTaskToCurrentList(task) {
-        currentList.tasks[task.taskId] = task;
-        updateFirestoreDB();
+        this.currentList.tasks[task.taskId] = task;
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 
     modifyTask(name, dueDate, details = '', taskId) {
-        for (const task of Object.values(currentList.tasks)) {
+        for (let task of Object.values(this.currentList.tasks)) {
             if(task.taskId == taskId) {
                 task.name = name;
                 task.dueDate = dueDate;
                 task.details = details;
-                updateFirestoreDB();
+                saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
                 break;
             }
         }
     }
 
     deleteTask(task) {
-        delete currentList.tasks[task];
-        updateFirestoreDB();
+        delete this.currentList.tasks[task];
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 
-    createNewList(name) {
-        const newList = new List(name, nextListId++);
-        lists[name] = newList;
-        updateFirestoreDB();
+    createNewList(listName) {
+        let newList = new List(listName, this.nextListId++);
+        this.lists[listName] = newList;
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 
     modifyListName(oldName, newName) {
-        lists[newName] = lists[oldName];
-        delete lists[oldName];
-        lists[newName].name = newName;
-        updateFirestoreDB();
+        this.lists[newName] = this.lists[oldName];
+        delete this.lists[oldName];
+        this.lists[newName].name = newName;
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 
-    
     setDefaultList() {
-        if (Object.keys(lists).length === 0) {
-            const chores = new List('Chores', nextListId++);
-            lists.Chores = chores;
-            this.makeCurrentList('Chores');
+        if (Object.keys(this.lists).length === 0) {
+            let chores = new List('Chores', this.nextListId++);
+            this.lists.chores = chores;
+            this.makeCurrentList('chores');
         } 
     }
 
     makeCurrentList(listName) {
-        currentList = lists[listName];
+        this.currentList = this.lists[listName];
     }
 
-    writeOverCurrentList(dataFromStorage) {
-        currentList = dataFromStorage;
+    updateData(dataFromFirebase) {
+        this.currentList = dataFromFirebase.currentList;
+        this.lists = dataFromFirebase.lists;
+        this.nextListId = dataFromFirebase.nextListId;
     }
 
-    setCurrentListToBeOneOfTheRemainingLists() {
-        const firstList = Object.keys(lists)[0];
-        this.makeCurrentList(firstList);
+    setOneOfTheRemainingListsToBeCurrentList() {
+        let firstListName = Object.keys(this.lists)[0];
+        this.makeCurrentList(firstListName);
     }
 
     deleteList(listName) {
-        delete lists[listName];
-        updateFirestoreDB();
+        delete this.lists[listName];
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 }
 
-const logic = new Logic();
-
-/* Although the following function is related to the Firestore database,
-I have left it here since it involves the lists object, and moving this function
-to the Firestore module would involve refactoring of much of the logic, which
-I deem unnecesary. */
-
-async function loadToDoListDataFromFirestore() {
-    const docRef = doc(db, "data", "datadoc");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        console.log("there's stuff in the Firestore");
-        const data = docSnap.data();
-        logic.writeOverCurrentList(JSON.parse(data.currentList));
-        lists = JSON.parse(data.lists);
-        nextListId = JSON.parse(data.nextListId);
-        domController.renderDataFromFirestore();
-    } else {
-        console.log('nothing in Firestore');
-        logic.setDefaultList();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadToDoListDataFromFirestore);
-    
-
-export {currentList, lists, logic, nextListId};
+export default new Logic();
