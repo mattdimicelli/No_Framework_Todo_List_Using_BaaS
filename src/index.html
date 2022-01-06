@@ -14,20 +14,44 @@
 <body>
     <header>
         <h1><i class="fas fa-check-circle"></i>To-Do..</h1>
-        <button class="menu-btn"><i class="fas fa-grip-horizontal"></i></button>
+        <button class="menu-btn">
+            <i class="fas fa-grip-horizontal menu-btn-icon"></i>
+        </button>
     </header>
     <div class="main-container">
         <ul class="menu">
-            <li class="menu-btn all"><i class="fas fa-globe"></i>View All</li>
-            <li class="menu-btn today"><i class="fas fa-calendar-day"></i>Today</li>
-            <li class="menu-btn week"><i class="fas fa-calendar-week"></i>Week</li>
+            <li class="menu-btn all">
+                <button class="no-styling all">
+                    <i class="fas fa-globe all-icon"></i>View All
+                </button>
+            </li>
+            <li class="menu-btn today">
+                <button class="no-styling day">
+                    <i class="fas fa-calendar-day day-icon"></i>Today
+                </button>
+            </li>
+            <li class="menu-btn week">
+                <button class="no-styling week">
+                    <i class="fas fa-calendar-week week-icon"></i>Week
+                </button></li>
             <li class="list-label">Lists
                 <ul class="ul-list-of-lists">
-                    <li class="list menu-btn"><i class="fas fa-list-alt"></i>Chores<span
-                            class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>
+                    <li class="list-menu-btn">
+                        <button class="no-styling menu-list">
+                            <span class="list-icon-and-text">
+                                <i class="fas fa-list-alt list-menu-icon"></i>
+                                <span class="list-name-text">Chores</span>
+                            </span>
+                                <i class="fas fa-edit edit-list-graphic"></i>
+                        </button>
+                    </li>
                 </ul>
             </li>
-            <li class="menu-btn add-list-btn"><i class="fas fa-plus"></i></i>Add List</li>
+            <li class="menu-btn add-list-btn">
+                <button class="no-styling list-add-btn">
+                    <i class="fas fa-plus"></i></i>Add List
+                </button>
+            </li>
         </ul>
         <div class="wrapper-for-large-screens">
             <div class="todo-list-wrapper">
@@ -41,23 +65,30 @@
             <div class="new-task-editor hidden">
                 <form action="" method="get" class="task-editor-form">
                     <input class="task-field" name="task" type="text" placeholder="Task" />
-                    <textarea class="description-field" name="description" placeholder="Details"></textarea>
+                    <textarea class="description-field" name="description" placeholder="Details">
+                    </textarea>
                     <div class="datepicker-addbutton">
                         <input class="date-picker" name="due-date" type="date" />
-                        <button class="cancel-new-task-btn"><i class="far fa-times-circle"></i></button>
-                        <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                        <button class="cancel-new-task-btn">
+                            <i class="far fa-times-circle cancel-new-task-icon">
+                            </i>
+                        </button>
+                        <button class="new-task-submit-btn">
+                            <i class="far fa-check-circle new-task-checkmark"></i>
+                        </button>
                     </div>
                 </form>
             </div>
-            <button class="new-task-btn"><i class="fas fa-plus"></i>Add Task</button>
-
+            <button class="new-task-btn">
+                <i class="fas fa-plus new-task-plus"></i>Add Task
+            </button>
         </div>
     </div>
     <footer>
         <span class="copyright">Copyright © 2021 mattdimicelli</span>
-        <a class="github-link" href="https://github.com/mattdimicelli" target="_blank"><i
-                class="fab fa-github-square"></i></a>
-
+        <a class="github-link" href="https://github.com/mattdimicelli" target="_blank">
+            <i class="fab fa-github-square"></i>
+        </a>
     </footer>
     </div>
 </body>

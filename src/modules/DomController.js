@@ -17,12 +17,132 @@ class DomController {
 
     handleClick(e) {
         const targetName = e.target.className;
+        const target = e.target;
         switch (targetName) {
-            case ('task-date-btns' || 'task'):
-                const task = e.target.closest('div[class="task-date-btns"]').firstElementChild;
-                const date = e.target.closest('div[class="task-date-btns"]').children[1].firstElementChild;
+            case 'due-date':
+            case 'date-and-btns':
+            case 'task':
+            case 'task-date-btns': {
+                const task = target.closest('.task-date-btns').firstElementChild;
+                const date = target.closest('.task-date-btns').children[1]
+                .firstElementChild;
                 this.toggleStrikethru(task, date);
                 break;
+            }
+
+            case 'fas fa-edit task-edit-btn':
+            case 'edit-task-btn': {
+                e.preventDefault();
+                const taskEditor = target.closest('.todo-item').children[1];
+                const taskId = target.closest('.todo-item').dataset.id;         
+                this.renderTaskEditor(taskEditor, taskId);
+                break;
+            }
+
+            case 'new-task-btn':
+            case 'fas fa-plus new-task-plus': {
+                e.preventDefault();
+                const newTaskEditor = target.closest('.new-task-btn')
+                .previousElementSibling;
+                this.createNewTaskBtnHandler(newTaskEditor);
+                break;
+            }
+
+            case 'task-delete-btn':
+            case 'far fa-trash-alt edit-task-trashcan':
+                e.preventDefault();
+                this.taskDeleteBtnHandler(target);
+                break;
+
+            case 'cancel-new-task-btn':
+            case 'far fa-times-circle cancel-new-task-icon': {
+                e.preventDefault();
+                const newTaskEditor = target.closest('.new-task-editor');
+                this.cancelCreateNewTaskBtnHandler(newTaskEditor);
+                break;
+            }
+
+            case 'new-task-submit-btn':
+            case 'edit-task-submit-btn':
+            case 'far fa-check-circle new-task-checkmark':
+            case 'far fa-check-circle edit-task-checkmark':  
+                e.preventDefault();
+                this.taskSubmitBtnHandler(target);
+                break;
+
+            case 'fas fa-grip-horizontal menu-btn-icon':
+            case 'menu-btn': {
+                const menu = document.querySelector('.menu');
+                this.menuBtnHandler(menu);
+                break;
+            }
+
+            case 'fas fa-globe all-icon':
+            case 'menu-btn all': 
+            case 'no-styling all':
+                this.taskCurrentlyBeingEdited = false;
+                this.listCurrentlyBeingEdited = false;
+                this.renderTasks();
+                break;
+            
+            case 'menu-btn today':
+            case 'fas fa-calendar-day day-icon':
+            case 'no-styling day':
+                this.viewOnlyToday();
+                break;
+            
+            case 'menu-btn week':
+            case 'fas fa-calendar-week week-icon':
+            case 'no-styling week':
+                this.viewOnlyWeek();
+                break;
+            
+            case 'list-menu-btn':
+            case 'list-name-text':
+            case 'fas fa-list-alt list-menu-icon':
+                this.listMenuBtnHandler(target);
+                break;
+
+            case 'fas fa-edit edit-list-graphic': {
+                const listItem = target.closest('.list-menu-btn');
+                const listName = listItem.textContent;
+                this.startToEditListNameBtnHandler(listName, listItem); 
+                break;
+            }
+
+            case 'far fa-trash-alt remove-list-trashcan':
+                this.deleteList();
+                break;
+            
+            case 'far fa-times-circle edit-list-cancel-btn':
+                this.listCurrentlyBeingEdited = false;
+                this.renderLists();
+                break;
+            
+            case 'far fa-check-circle edit-list-submit-btn': {
+                /* this btn is identical to the 'new-list-submit-btn', but 
+                substitutes it when an existing list is currently being edited */
+                const textInput = target.previousElementSibling
+                .previousElementSibling.previousElementSibling;
+                const newName = textInput.value;
+                if(newName === this.oldListName) {
+                     textInput.focus();
+                     return;
+                }
+                this.editListNameSubmitBtnHandler(newName, textInput);
+                break;
+            }
+            
+                
+
+        }
+    }
+
+    listMenuBtnHandler(target) {
+        const listMenuBtn = target.closest('.list-menu-btn');
+        if (!listMenuBtn.children[1].matches('input')) {
+            const listName = listMenuBtn.children[0].children[1].textContent;
+            this.switchList(listName);
         }
     }
     
@@ -76,7 +196,7 @@ class DomController {
                     const taskId = target.parentElement.parentElement.parentElement.dataset.id;         
                     this.renderTaskEditor(taskEditor, taskId);
                 } else if(target.className === 'edit-task-submit-btn') {
-                    this.editTaskSubmitBtnHandler(target);
+                    this.taskSubmitBtnHandler(target);
                 } else if(target.className === 'new-task-btn') {
                     const newTaskEditor = target.previousElementSibling;
                     this.createNewTaskBtnHandler(newTaskEditor);
@@ -100,7 +220,7 @@ class DomController {
                     this.createNewTaskBtnHandler(newTaskEditor);
                 } else if(target.classList.contains('add-list-btn')) {
                     this.addListBtnHandler();
-                } else if(target.className === 'list menu-btn' && !target.children[1].matches('input')) {
+                } else if(target.className === 'list-menu-btn' && !target.children[1].matches('input')) {
                     const listName = target.childNodes[1].textContent;
                     this.switchList(listName);
                 } else if(target.className === 'menu-btn all') {
@@ -113,7 +233,7 @@ class DomController {
                     this.viewOnlyWeek();
                 } else if(target.className === 'edit-task-submit-btn') {
                     e.preventDefault();
-                    this.editTaskSubmitBtnHandler(target);
+                    this.taskSubmitBtnHandler(target);
                 } else if(target.className === 'task-delete-btn') {
                     e.preventDefault();
                     this.taskDeleteBtnHandler(target);
@@ -154,7 +274,7 @@ class DomController {
             <span class="task">${name}</span>
             <div class="date-and-btns">
                 <span class="due-date">${this.createReadableDate(dueDate)}</span>
-                <button class="edit-task-btn"><i class="fas fa-edit"></i></button>
+                <button class="edit-task-btn"><i class="fas fa-edit task-edit-btn"></i></button>
 
             </div>
         </div>
@@ -164,8 +284,8 @@ class DomController {
                         <textarea class="description-field" name="description" placeholder="Details"></textarea>
                         <div class="datepicker-addbutton">
                             <input class="date-picker" name="due-date" type="date" required />
-                            <button class="task-delete-btn"><i class="far fa-trash-alt"></i></button>
-                            <button class="edit-task-submit-btn"><i class="far fa-check-circle"></i></button>
+                            <button class="task-delete-btn"><i class="far fa-trash-alt edit-task-trashcan"></i></button>
+                            <button class="edit-task-submit-btn"><i class="far fa-check-circle edit-task-checkmark"></i></button>
                         </div>
                     </form>
                 </div>
@@ -239,7 +359,7 @@ class DomController {
         if (this.listCurrentlyBeingEdited) return;
         this.listCurrentlyBeingEdited = true;
         this.oldListName = listName;
-        const html = `<i class="fas fa-list-alt"></i><input class="new-list-text-input" type="text" value="${listName}" /><i class="far fa-trash-alt list"></i><i class="far fa-times-circle edit-list-cancel-btn"></i><i class="far fa-check-circle edit-list-submit-btn"></i>`;
+        const html = `<i class="fas fa-list-alt list-menu-icon"></i><input class="new-list-text-input" type="text" value="${listName}" /><button class="no-styling delete-list-trashcan"><i class="far fa-trash-alt remove-list-trashcan"></i></button><button class="no-styling cancel-edit-list-button"><i class="far fa-times-circle edit-list-cancel-btn"></i></button><button class="no-styling submit-edit-list-button"><i class="far fa-check-circle edit-list-submit-btn"></i></button>`;
         listItem.innerHTML = html;
     }
 
@@ -273,7 +393,7 @@ class DomController {
             if (list1.id < list2.id) return -1;
         }); 
         for (const list of sortedLists) {
-            html += `<li class="list menu-btn"><i class="fas fa-list-alt"></i>${list.name}<span class="edit-list-icon"><i class="fas fa-edit edit-list-icon"></i></span></li>`;
+            html += `<li class="list-menu-btn"><button class="no-styling menu-list"><span class="list-icon-and-text"><i class="fas fa-list-alt list-menu-icon"></i><span class="list-name-text">${list.name}</span></span><i class="fas fa-edit edit-list-graphic"></i></button></li>`;
         }
         ul.innerHTML = html;
     }
@@ -290,7 +410,7 @@ class DomController {
         let li = document.createElement('li');
         li.classList.add('list', 'menu-btn');
         let i = document.createElement('i');
-        i.classList.add('fas', 'fa-list-alt');
+        i.classList.add('fas', 'fa-list-alt', 'list-menu-icon');
         li.append(i);
         const textInput = `<input class="new-list-text-input" type="text" /><i class="far fa-times-circle new-list-cancel-btn"></i><i class="far fa-check-circle new-list-submit-btn"></i>`;
         li.insertAdjacentHTML('beforeend', textInput);
@@ -299,7 +419,7 @@ class DomController {
 
     taskDeleteBtnHandler(target) {
         this.taskCurrentlyBeingEdited = false;
-        const taskId = target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+        const taskId = target.closest('.todo-item').dataset.id;
         logic.deleteTask(taskId);
         this.renderTasks();
     }
@@ -310,8 +430,10 @@ class DomController {
         this.taskCurrentlyBeingEdited = true;
         taskEditor.classList.toggle('hidden');
         const taskTextInput = taskEditor.firstElementChild.firstElementChild;
-        const detailsTextarea = taskEditor.firstElementChild.firstElementChild.nextElementSibling;
-        const datepicker = taskEditor.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild;
+        const detailsTextarea = taskEditor.firstElementChild.firstElementChild
+        .nextElementSibling;
+        const datepicker = taskEditor.firstElementChild.firstElementChild
+        .nextElementSibling.nextElementSibling.firstElementChild;
     
         taskTextInput.value = logic.currentList.tasks[taskId].name;
      
@@ -321,33 +443,35 @@ class DomController {
         }   
     }
 
-    editTaskSubmitBtnHandler(target) {
-        
-        const taskName = target.parentElement.parentElement.children[0].value;
-        const details = target.parentElement.parentElement.children[1].value;
-        const dueDate = target.parentElement.parentElement.children[2].firstElementChild.valueAsDate;
+    taskSubmitBtnHandler(target) {
+        const taskEditorForm = target.closest('.task-editor-form');
+        const taskName = taskEditorForm.children[0].value;
+        const details = taskEditorForm.children[1].value;
+        const dueDate = taskEditorForm.children[2].firstElementChild.valueAsDate;
 
         if(!this.dueDateIsValid(dueDate)){
             // if the date is not valid, bring the date picker into focus
-            target.parentElement.parentElement.children[2].firstElementChild.focus();
+            taskEditorForm.children[2].firstElementChild.focus();
         } else if(!taskName) {
             // don't allow user to save task without name
-            target.parentElement.parentElement.children[0].focus();
+            taskEditorForm.children[0].focus();
         } else if(taskName && this.dueDateIsValid(dueDate)) {
-            const taskEditor = target.parentElement.parentElement.parentElement;
-            const taskIsNew = (taskEditor.className === 'new-task-editor') ? true : false;
-            const currentTime = Date.now(); //will use currentTime as a unique identifier for each task
+            const taskEditorDiv = taskEditorForm.parentElement;
+            const taskIsNew = taskEditorDiv.className === 'new-task-editor';
+            const currentTime = Date.now(); /* will use currentTime as a unique
+            identifier for each task */
 
             if(taskIsNew) {
-                const task = logic.createNewTask(taskName, dueDate, details, currentTime);
+                const task = logic.createNewTask(
+                    taskName, dueDate, details, currentTime);
                 logic.addTaskToCurrentList(task); 
                 this.renderTasks();
-                taskEditor.firstElementChild.firstElementChild.value = '';
-                taskEditor.firstElementChild.children[1].value = '';
-                taskEditor.firstElementChild.children[2].firstElementChild.value = '';
-                taskEditor.classList.toggle('hidden');
+                taskEditorForm.firstElementChild.value = '';
+                taskEditorForm.children[1].value = '';
+                taskEditorForm.children[2].firstElementChild.value = '';
+                taskEditorDiv.classList.toggle('hidden');
             } else if(!taskIsNew) {
-                const taskId = target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+                const taskId = target.closest('.todo-item').dataset.id
                 logic.modifyTask(taskName, dueDate, details, taskId);
                 this.renderTasks();
             }

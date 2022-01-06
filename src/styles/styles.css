@@ -20,6 +20,17 @@ button {
 	font-size: inherit;
 }
 
+button.no-styling {
+	all: unset;
+    display: revert;
+}
+
+button:hover,
+.menu-btn:hover,
+.list-menu-btn {
+	cursor: pointer;
+}
+
 h1 {
 	font-size: 3rem;
 }
@@ -94,9 +105,9 @@ header {
 	padding-left: 0rem;
 }
 
-.fa-trash-alt {
+/* .fa-trash-alt {
 	margin-left: 1rem;
-}
+} */
 
 .menu > li:first-of-type {
 	margin-top: 1rem;
@@ -112,19 +123,20 @@ header {
 	font-weight: bold;
 }
 
-.menu-btn {
+.menu-btn, .list-menu-btn {
 	margin-right: 1rem;
 	display: flex;
+	align-items: center;
 }
 
 span.edit-list-icon {
 	margin-left: auto;
 }
 
-.fa-check-circle {
+/* .fa-check-circle {
 	margin-left: 1rem;
 	margin-right: 0.5rem;
-}
+} */
 
 .menu .fas {
 	margin-right: 0.5rem;
@@ -133,6 +145,7 @@ span.edit-list-icon {
 .task-date-btns {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .task-editor,
@@ -145,7 +158,6 @@ span.edit-list-icon {
 }
 
 .todo-item {
-	margin-bottom: 1rem;
 	width: 98%;
 	margin-left: auto;
 	margin-right: auto;
@@ -180,13 +192,14 @@ span.edit-list-icon {
 }
 
 .edit-task-btn {
-	padding: 0;
 	margin-left: 1rem;
 }
 
 .task-delete-btn:hover,
 .edit-task-submit-btn:hover,
-.cancel-new-task-btn:hover  {
+.cancel-new-task-btn:hover,
+.new-task-submit-btn:hover
+  {
 	background-color: var(--secondary-light-color);
 }
 
@@ -194,6 +207,36 @@ span.edit-list-icon {
 .cancel-new-task-btn {
 	margin-left: auto;
 }
+
+.task-delete-btn,
+.edit-task-submit-btn,
+.cancel-new-task-btn,
+.new-task-submit-btn,
+.edit-task-btn,
+.task-edit-btn,
+.edit-list-graphic {
+	padding: 5px;
+}
+
+.edit-task-submit-btn,
+.new-task-submit-btn {
+	margin-left: 1rem;
+	margin-right: 0.5rem;
+}
+
+.list-menu-btn {
+	justify-content: space-between;
+	font-size: 1rem;
+	font-weight: normal;
+	padding-left: 0rem;
+}
+
+
+
+
+
+
+
 
 .date-picker {
 	display: inline-block;
@@ -231,7 +274,8 @@ span.edit-list-icon {
 	font-size: 2rem;
 }
 
-.menu-btn:hover {
+.menu-btn:hover,
+.list-menu-btn:hover {
 	background-color: var(--middle-color);
 }
 
@@ -239,8 +283,7 @@ span.edit-list-icon {
 	margin-right: 1rem;
 }
 
-.new-list-cancel-btn,
-.edit-list-cancel-btn{
+.new-list-cancel-btn {
 	margin-left: 1rem;
 }
 
