@@ -13,6 +13,14 @@ class DomController {
     initializeEventListeners() {
         document.addEventListener('click', this.handleClick.bind(this));
         document.addEventListener('DOMContentLoaded', loadToDoListDataFromFirestore);
+        const textInput = document.querySelectorAll('input[type="text"]');
+        textInput.forEach(textInput => {
+            textInput.addEventListener('keydown', this.textInputKeydownHandler);
+        });
+    }
+
+    textInputKeydownHandler(e) {
+        if (e.key === 'Enter') e.preventDefault();
     }
 
     handleClick(e) {
@@ -24,24 +32,25 @@ class DomController {
             case 'due-date':
             case 'date-and-btns':
             case 'task':
-            case 'task-date-btns': {
+            case 'task-date-btns': 
+            case 'details-hidden':
+            case 'task strikethru':
+            case 'due-date strikethru':
+            case 'details':
                 this.toggleStrikethru(target);
                 break;
-            }
 
             case 'fas fa-edit task-edit-btn':
-            case 'edit-task-btn': {
+            case 'edit-task-btn': 
                 e.preventDefault();      
                 this.renderTaskEditor(target);
                 break;
-            }
 
             case 'new-task-btn':
-            case 'fas fa-plus new-task-plus': {
+            case 'fas fa-plus new-task-plus': 
                 e.preventDefault();
                 this.addTaskBtnHandler(target);
                 break;
-            }
 
             case 'task-delete-btn':
             case 'far fa-trash-alt edit-task-trashcan':
@@ -50,11 +59,10 @@ class DomController {
                 break;
 
             case 'cancel-new-task-btn':
-            case 'far fa-times-circle cancel-new-task-icon': {
+            case 'far fa-times-circle cancel-new-task-icon': 
                 e.preventDefault();
                 this.cancelCreateNewTaskBtnHandler(target);
                 break;
-            }
 
             case 'new-task-submit-btn':
             case 'edit-task-submit-btn':
@@ -65,11 +73,10 @@ class DomController {
                 break;
 
             case 'fas fa-grip-horizontal menu-btn-icon':
-            case 'menu-btn': {
+            case 'menu-btn': 
                 e.preventDefault();
                 this.menuBtnHandler();
                 break;
-            }
 
             case 'fas fa-globe all-icon':
             case 'menu-btn all': 
@@ -119,11 +126,10 @@ class DomController {
                 break;
             
             case 'no-styling submit-edit-list-button':
-            case 'far fa-check-circle edit-list-submit-btn': {
+            case 'far fa-check-circle edit-list-submit-btn': 
                 e.preventDefault();
                 this.editListNameSubmitBtnHandler(target);
                 break;
-            }
 
             case 'no-styling list-add-btn':
             case 'menu-btn add-list-btn':
@@ -139,11 +145,17 @@ class DomController {
                 break;
 
             case 'far fa-check-circle new-list-submit-btn':
-            case 'no-styling new-list-checkmark-btn': {
+            case 'no-styling new-list-checkmark-btn': 
                 e.preventDefault();
                 this.newListSubmitBtnHandler(target);
                 break;
-            }
+
+            case 'show-task-details-btn':
+            case 'fas fa-book-open show-details-btn':
+                e.preventDefault();
+                this.showDetailsBtnHandler(target);
+                break;
+        
         }
     }
 
@@ -226,7 +238,8 @@ class DomController {
             } else return false;
         });
         for (const task of tasksOfToday) {
-            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
+            const {taskId, name, dueDate, details} = task;
+            const html = this.createTaskHTML(taskId, name, dueDate, details);
             ulForTasks.innerHTML += html;
         }
     }
@@ -243,7 +256,8 @@ class DomController {
             } else return false;
         });
         for (const task of tasksOfWeek) {
-            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate);
+            const {taskId, name, dueDate, details} = task;
+            const html = this.createTaskHTML(taskId, name, dueDate, details);
             ulForTasks.innerHTML += html;
         }
     }
@@ -349,13 +363,28 @@ class DomController {
         target.closest('.list-menu-btn').remove();
     }
 
-    createTaskHTML(taskId, name, dueDate) {
+    showDetailsBtnHandler(target) {
+        const taskDateBtnsDiv = target.closest('.task-date-btns');
+        const taskDetailsDiv = taskDateBtnsDiv.firstElementChild.firstElementChild;
+        taskDetailsDiv.classList.toggle('hidden');
+    }
+
+    createTaskHTML(taskId, name, dueDate, details) {
         const html = 
         `<li class="todo-item" data-id="${taskId}">
             <div class="task-date-btns">
-                <span class="task">${name}</span> 
+                <div class="task">${name}
+                    <div class="hidden details">${details}</div>
+                </div> 
                 <div class="date-and-btns">
                     <span class="due-date">${this.createReadableDate(dueDate)}</span>
+
+                    ${details !== '' ?
+                    `<button class="show-task-details-btn">
+                        <i class="fas fa-book-open show-details-btn"></i>
+                    </button>` 
+                    : ''}
+
                     <button class="edit-task-btn">
                         <i class="fas fa-edit task-edit-btn"></i>
                     </button>
@@ -479,7 +508,8 @@ class DomController {
         ulForTasks.innerHTML = '';
         if(logic.currentList === null) ulForTasks.innerHTML = '';
         for (const task of Object.values(logic.currentList.tasks)) {
-            const html = this.createTaskHTML(task.taskId, task.name, task.dueDate); 
+            const {taskId, name, dueDate, details} = task;
+            const html = this.createTaskHTML(taskId, name, dueDate, details); 
             ulForTasks.innerHTML += html;
         }
     }

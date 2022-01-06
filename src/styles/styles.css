@@ -163,13 +163,19 @@ span.edit-list-icon {
 	margin-right: auto;
 }
 
-.task-date-btns:hover {
+.task-date-btns:hover,
+.new-task-btn:hover {
 	background-color: var(--secondary-light-color);
 }
 
 .task {
 	display: block;
 	margin-left: 1rem;
+	font-weight: bold;
+}
+
+.details {
+	font-weight: normal;
 }
 
 .column-names {
