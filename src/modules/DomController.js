@@ -72,6 +72,7 @@ class DomController {
 
             case 'fas fa-grip-horizontal menu-btn-icon':
             case 'menu-btn': {
+                e.preventDefault();
                 const menu = document.querySelector('.menu');
                 this.menuBtnHandler(menu);
                 break;
@@ -80,6 +81,7 @@ class DomController {
             case 'fas fa-globe all-icon':
             case 'menu-btn all': 
             case 'no-styling all':
+                e.preventDefault();
                 this.taskCurrentlyBeingEdited = false;
                 this.listCurrentlyBeingEdited = false;
                 this.renderTasks();
@@ -88,18 +90,23 @@ class DomController {
             case 'menu-btn today':
             case 'fas fa-calendar-day day-icon':
             case 'no-styling day':
+                e.preventDefault();
                 this.viewOnlyToday();
                 break;
             
             case 'menu-btn week':
             case 'fas fa-calendar-week week-icon':
             case 'no-styling week':
+                e.preventDefault();
                 this.viewOnlyWeek();
                 break;
             
             case 'list-menu-btn':
             case 'list-name-text':
             case 'fas fa-list-alt list-menu-icon':
+            case 'list-icon-and-text':
+            case 'no-styling menu-list':
+                e.preventDefault();
                 this.listMenuBtnHandler(target);
                 break;
 
@@ -110,16 +117,22 @@ class DomController {
                 break;
             }
 
+            case 'no-styling delete-list-trashcan':
             case 'far fa-trash-alt remove-list-trashcan':
+                e.preventDefault();
                 this.deleteList();
                 break;
             
+            case 'no-styling cancel-edit-list-button':
             case 'far fa-times-circle edit-list-cancel-btn':
+                e.preventDefault();
                 this.listCurrentlyBeingEdited = false;
                 this.renderLists();
                 break;
             
+            case 'no-styling submit-edit-list-button':
             case 'far fa-check-circle edit-list-submit-btn': {
+                e.preventDefault();
                 /* this btn is identical to the 'new-list-submit-btn', but 
                 substitutes it when an existing list is currently being edited */
                 const textInput = target.previousElementSibling
@@ -140,8 +153,10 @@ class DomController {
 
     listMenuBtnHandler(target) {
         const listMenuBtn = target.closest('.list-menu-btn');
-        if (!listMenuBtn.children[1].matches('input')) {
-            const listName = listMenuBtn.children[0].children[1].textContent;
+        if(listMenuBtn.children.length === 1) {
+            // if the list was currently being edited, the listMenuBtn would have
+            // a second child (a text input), so the following would not run
+            const listName = listMenuBtn.children[0].children[0].children[1].textContent;
             this.switchList(listName);
         }
     }
@@ -393,7 +408,19 @@ class DomController {
             if (list1.id < list2.id) return -1;
         }); 
         for (const list of sortedLists) {
-            html += `<li class="list-menu-btn"><button class="no-styling menu-list"><span class="list-icon-and-text"><i class="fas fa-list-alt list-menu-icon"></i><span class="list-name-text">${list.name}</span></span><i class="fas fa-edit edit-list-graphic"></i></button></li>`;
+            html += 
+            `<li class="list-menu-btn">
+                <button class="no-styling menu-list">
+                    <span class="list-icon-and-text">
+                        <i class="fas fa-list-alt list-menu-icon"></i>
+                        <span class="list-name-text">${list.name}</span>
+                    </span>
+                    <i class="fas fa-edit edit-list-graphic"></i>
+                    <!-- This is not semantically perfect because this edit-list
+                    -graphic should be a button, but cannot nest a button inside
+                     a button. Todo: improve -->
+                </button>
+            </li>`;
         }
         ul.innerHTML = html;
     }

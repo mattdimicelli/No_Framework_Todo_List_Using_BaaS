@@ -58,6 +58,7 @@ class Logic {
 
     makeCurrentList(listName) {
         this.currentList = this.lists[listName];
+        saveToFirestoreDB(this.currentList, this.nextListId, this.lists);
     }
 
     updateData(dataFromFirebase) {
