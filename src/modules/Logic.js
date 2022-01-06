@@ -51,8 +51,9 @@ class Logic {
     setDefaultList() {
         if (Object.keys(this.lists).length === 0) {
             let chores = new List('Chores', this.nextListId++);
-            this.lists.chores = chores;
-            this.makeCurrentList('chores');
+            this.lists.Chores = chores;  /* obj props are case-sensitive. 
+            keeping capitalized since user input may include capitalized names */
+            this.makeCurrentList('Chores');
         } 
     }
 
