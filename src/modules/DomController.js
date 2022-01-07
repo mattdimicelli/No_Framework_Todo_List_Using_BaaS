@@ -72,10 +72,10 @@ class DomController {
                 this.taskSubmitBtnHandler(target);
                 break;
 
-            case 'fas fa-grip-horizontal menu-btn-icon':
-            case 'menu-btn': 
+            case 'fas fa-grip-horizontal toggle-menu-btn-icon':
+            case 'toggle-menu-btn': 
                 e.preventDefault();
-                this.menuBtnHandler();
+                this.toggleMenuBtnHandler();
                 break;
 
             case 'fas fa-globe all-icon':
@@ -206,7 +206,7 @@ class DomController {
         newTaskEditor.classList.add('hidden');
     }
 
-    menuBtnHandler() {
+    toggleMenuBtnHandler() {
         const menu = document.querySelector('.menu');
         if(window.getComputedStyle(menu).display === 'none'){
             menu.style.display = 'block';
@@ -475,7 +475,11 @@ class DomController {
         } else if(!taskName) {
             // don't allow user to save task without name
             taskEditorForm.children[0].focus();
-        } else if(taskName && this.dueDateIsValid(dueDate)) {
+        } else if (taskName.length > 125) {
+            taskEditorForm.children[0].focus();
+            alert('The task must be 125 characters or less.');
+        }
+        else if(taskName && this.dueDateIsValid(dueDate)) {
             const taskEditorDiv = taskEditorForm.parentElement;
             const taskIsNew = taskEditorDiv.className === 'new-task-editor';
             const currentTime = Date.now(); /* will use currentTime as a unique

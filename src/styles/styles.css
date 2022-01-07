@@ -1,4 +1,4 @@
-/* My styles */
+/* Element selectors */
 
 :root {
 	--main-dark-color: #333;
@@ -18,21 +18,6 @@ button {
 	border: none;
 	color: inherit;
 	font-size: inherit;
-}
-
-button.no-styling {
-	all: unset;
-    display: revert;
-}
-
-button:hover,
-.menu-btn:hover,
-.list-menu-btn {
-	cursor: pointer;
-}
-
-h1 {
-	font-size: 3rem;
 }
 
 ul  {
@@ -68,46 +53,32 @@ header {
 	width: 100%;
 }
 
-.main-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 80vh;
-	overflow: auto;
+button.no-styling {
+	/* special class to use for elements such as i-frames that have "wrapper" 
+	<button> els for semantics */
+	all: unset;
+    display: revert;
 }
 
-.copyright {
-	margin-right: 0.7rem;
+/* Hover psuedoclass */
+
+button:hover,
+.menu-btn:hover,
+.list-menu-btn:hover,
+.toggle-menu-btn:hover {
+	cursor: pointer;
 }
 
-
-
-.menu {
-	align-items: flex-end;
+.task-date-btns:hover,
+.new-task-btn:hover,
+.task-delete-btn:hover,
+.edit-task-submit-btn:hover,
+.cancel-new-task-btn:hover,
+.new-task-submit-btn:hover {
 	background-color: var(--secondary-light-color);
-	display: none;
-	flex-flow: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	width: 100%;
 }
 
-
-.menu li {
-	padding: 0.5rem;
-	flex-basis: 85%;
-	border-radius: 5px;
-}
-
-.list-label .list {
-	font-size: 1rem;
-	font-weight: normal;
-	padding-left: 0rem;
-}
-
-/* .fa-trash-alt {
-	margin-left: 1rem;
-} */
+/* Pseudoclass */
 
 .menu > li:first-of-type {
 	margin-top: 1rem;
@@ -117,35 +88,31 @@ header {
 	margin-bottom: 1rem;
 }
 
-.menu > .list-label {
-	background-color: var(--secondary-light-color);
-	font-size: 1.5rem;
-	font-weight: bold;
+/* Class selectors */
+
+.no-styling.delete-list-trashcan,
+.no-styling.cancel-edit-list-button,
+.no-styling.submit-edit-list-button {
+	margin-left: 0.4rem;
 }
 
-.menu-btn, .list-menu-btn {
-	margin-right: 1rem;
+.no-styling.menu-list{
+	width: 100%;
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 }
-
-span.edit-list-icon {
-	margin-left: auto;
-}
-
-/* .fa-check-circle {
-	margin-left: 1rem;
-	margin-right: 0.5rem;
-} */
 
 .menu .fas {
 	margin-right: 0.5rem;
 }
 
-.task-date-btns {
+.menu-btn,
+.list-menu-btn {
+	padding: 0.5rem;
+	flex-basis: 85%;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	border-radius: 5px;
 }
 
 .task-editor,
@@ -155,58 +122,6 @@ span.edit-list-icon {
 	border-radius: 0.5rem;
 	margin: 1rem 1rem 0 1rem;
 	padding: 1rem;
-}
-
-.todo-item {
-	width: 98%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.task-date-btns:hover,
-.new-task-btn:hover {
-	background-color: var(--secondary-light-color);
-}
-
-.task {
-	display: block;
-	margin-left: 1rem;
-	font-weight: bold;
-}
-
-.details {
-	font-weight: normal;
-}
-
-.column-names {
-	display: flex;
-	justify-content: space-between;
-}
-
-.list-column-name {
-	margin-left: 1rem;
-}
-
-.due-date-column-name {
-	margin-right: 2rem;
-}
-
-.date-and-btns {
-	margin-right: 1rem;
-	flex-shrink: 0;
-	flex-grow: 0;
-}
-
-.edit-task-btn {
-	margin-left: 1rem;
-}
-
-.task-delete-btn:hover,
-.edit-task-submit-btn:hover,
-.cancel-new-task-btn:hover,
-.new-task-submit-btn:hover
-  {
-	background-color: var(--secondary-light-color);
 }
 
 .task-delete-btn,
@@ -230,12 +145,90 @@ span.edit-list-icon {
 	margin-right: 0.5rem;
 }
 
+.app-title {
+	font-size: 3rem;
+}
+
+.details {
+	font-weight: normal;
+}
+
+.column-names {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 1.5rem;
+}
+
+.copyright {
+	margin-right: 0.7rem;
+}
+
+.date-and-btns {
+	margin-right: 1rem;
+}
+
+.edit-task-btn {
+	margin-left: 1rem;
+}
+
+.list-label {
+	background-color: var(--secondary-light-color);
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
 .list-menu-btn {
 	justify-content: space-between;
 	font-size: 1rem;
 	font-weight: normal;
 	padding-left: 0rem;
 }
+
+.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 80vh;
+	overflow: auto;
+}
+
+.menu {
+	background-color: var(--secondary-light-color);
+	display: none;
+	width: 100%;
+}
+
+.menu-btn {
+	margin-right: 1rem;
+	align-items: center;
+}
+
+.task {
+	display: block;
+	margin-left: 1rem;
+	font-weight: bold;
+}
+
+.task-date-btns {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.todo-item {
+	width: 98%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.toggle-menu-btn {
+	margin-right: 1rem;
+}
+
+
+
+
+
 
 
 
@@ -313,24 +306,19 @@ span.edit-list-icon {
 @media only screen and (min-width: 900px) {
 	.menu {
 		display: block;
-		flex-direction: row;
-		width: 34%;
+		width: 22%;
 		margin-top: 0;
 		margin-bottom: 0;
 		margin-block-end: 0;
 		height: 150vh;
-		align-items: center;
 		overflow: hidden;
 		padding-left: 1rem;
+		flex-shrink: 0;
 	}
 
-	.main-container {
+	.main {
 		flex-direction: row;
 		justify-content: normal;
-	}
-
-	.wrapper-for-large-screens {
-		width: 100%;
 	}
 
 	.todo-list-wrapper {
