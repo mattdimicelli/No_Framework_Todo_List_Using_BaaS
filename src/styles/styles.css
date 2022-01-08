@@ -25,32 +25,22 @@ ul  {
 	padding-inline-start: 0;
 }
 
-body {
-	position: relative;
-	max-height: 100vh;
-}
 
 footer {
-	align-items: center;
-	bottom: 0;
 	background-color: var(--main-dark-color);
-	display: flex;
-	height: 5vh;
-	justify-content: center;
-	left: 0;
-	width: 100%;
 	color: white;
 }
 
 header {
-	align-items: center;
 	background-color: var(--main-dark-color);
-	color: white;
-	display: flex;
 	font-size: 3rem;
-	height: 15vh;
+	color: var(--main-light-color);
+	display: flex;
 	justify-content: space-between;
-	width: 100%;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	
+
 }
 
 button.no-styling {
@@ -81,11 +71,9 @@ button:hover,
 /* Pseudoclass */
 
 .menu > li:first-of-type {
-	margin-top: 1rem;
 }
 
 .menu > li:last-of-type {
-	margin-bottom: 1rem;
 }
 
 /* Class selectors */
@@ -93,40 +81,26 @@ button:hover,
 .no-styling.delete-list-trashcan,
 .no-styling.cancel-edit-list-button,
 .no-styling.submit-edit-list-button {
-	margin-left: 0.4rem;
 }
 
 .no-styling.menu-list{
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 .menu .fas {
-	margin-right: 0.5rem;
 }
 
 .menu-btn,
 .list-menu-btn {
-	padding: 0.5rem;
-	flex-basis: 85%;
-	display: flex;
-	border-radius: 5px;
 }
 
 .task-editor,
 .new-task-editor {
 	height: 150px;
 	border: 1px solid black;
-	border-radius: 0.5rem;
-	margin: 1rem 1rem 0 1rem;
-	padding: 1rem;
 }
 
 .task-delete-btn,
 .cancel-new-task-btn {
-	margin-left: auto;
 }
 
 .task-delete-btn,
@@ -141,8 +115,6 @@ button:hover,
 
 .edit-task-submit-btn,
 .new-task-submit-btn {
-	margin-left: 1rem;
-	margin-right: 0.5rem;
 }
 
 .app-title {
@@ -154,21 +126,15 @@ button:hover,
 }
 
 .column-names {
-	display: flex;
-	justify-content: space-between;
-	padding: 0 1.5rem;
 }
 
 .copyright {
-	margin-right: 0.7rem;
 }
 
 .date-and-btns {
-	margin-right: 1rem;
 }
 
 .edit-task-btn {
-	margin-left: 1rem;
 }
 
 .list-label {
@@ -178,29 +144,19 @@ button:hover,
 }
 
 .list-menu-btn {
-	justify-content: space-between;
 	font-size: 1rem;
 	font-weight: normal;
-	padding-left: 0rem;
 }
 
 .main {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 80vh;
-	overflow: auto;
 }
 
 .menu {
 	background-color: var(--secondary-light-color);
 	display: none;
-	width: 100%;
 }
 
 .menu-btn {
-	margin-right: 1rem;
-	align-items: center;
 }
 
 .task {
@@ -210,40 +166,18 @@ button:hover,
 }
 
 .task-date-btns {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 .todo-item {
-	width: 98%;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 .toggle-menu-btn {
-	margin-right: 1rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 .date-picker {
-	display: inline-block;
 }
 
 .description-field, .task-field {
-	display: block;
-	width: 100%;
 	border: 0;
 }
 
@@ -258,12 +192,10 @@ button:hover,
 
 .edit-task-submit-btn, 
 .cancel-task-submission-btn {
-	display: inline-block;
 }
 
 .datepicker-addbutton{
-	display: flex;
-	justify-content: space-between;
+
 }
 
 .github-link,
@@ -279,54 +211,34 @@ button:hover,
 }
 
 .fa-plus{
-	margin-right: 1rem;
 }
 
 .new-list-cancel-btn {
-	margin-left: 1rem;
 }
 
 .new-task-btn {
-	margin-bottom: 1rem;
-	margin-top: 1rem;
-	width: 30%;
-	align-self: center;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-	margin-left: 31%;
+
 	
 }
 
 .new-list-text-input {
-	width: 69%;
 }
 
 
 
 @media only screen and (min-width: 900px) {
 	.menu {
-		display: block;
-		width: 22%;
-		margin-top: 0;
-		margin-bottom: 0;
-		margin-block-end: 0;
-		height: 150vh;
-		overflow: hidden;
-		padding-left: 1rem;
-		flex-shrink: 0;
+
 	}
 
 	.main {
-		flex-direction: row;
-		justify-content: normal;
+
 	}
 
 	.todo-list-wrapper {
-		width: 100%;
 	}
 
 	.new-task-btn {
-		margin-left: 40%;
 	}
 }
 
@@ -334,7 +246,6 @@ button:hover,
 /* Utility classes */
 
 .open {
-	display: flex;
 }
 
 .selected {

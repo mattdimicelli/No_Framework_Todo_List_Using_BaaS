@@ -1,6 +1,6 @@
 import Task from './Task';
 import List from './List';
-import { saveToFirestoreDB } from './Firestore';
+import { saveToFirestoreDB } from './Firebase';
 
 class Logic {
     constructor() {

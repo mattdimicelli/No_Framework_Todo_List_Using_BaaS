@@ -1,5 +1,5 @@
 import logic from './Logic';
-import { loadToDoListDataFromFirestore } from './Firestore.js';
+import { loadToDoListDataFromFirestore } from './Firebase.js';
 
 
 class DomController {

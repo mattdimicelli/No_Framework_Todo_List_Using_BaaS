@@ -12,88 +12,98 @@
 </head>
 
 <body>
-    <header>
-        <h1 class="app-title"><i class="fas fa-check-circle"></i>To-Do..</h1>
-        <button class="toggle-menu-btn">
-            <i class="fas fa-grip-horizontal toggle-menu-btn-icon"></i>
-        </button>
-    </header>
-    <main class="main">
-        <ul class="menu">
-            <li class="menu-btn all">
-                <button class="no-styling all">
-                    <i class="fas fa-globe all-icon"></i>View All
-                </button>
-            </li>
-            <li class="menu-btn today">
-                <button class="no-styling day">
-                    <i class="fas fa-calendar-day day-icon"></i>Today
-                </button>
-            </li>
-            <li class="menu-btn week">
-                <button class="no-styling week">
-                    <i class="fas fa-calendar-week week-icon"></i>Week
-                </button></li>
-            <li class="list-label">Lists
-                <ul class="ul-list-of-lists">
-                    <li class="list-menu-btn">
-                        <button class="no-styling menu-list">
-                            <span class="list-icon-and-text">
-                                <i class="fas fa-list-alt list-menu-icon"></i>
-                                <span class="list-name-text">Chores</span>
-                            </span>
-                                <i class="fas fa-edit edit-list-graphic"></i>
-                                <!-- This is not semantically perfect because
-                                     this edit-list-graphic should be a button,
-                                      but cannot nest a button inside a button. 
-                                       Todo: improve -->
-                        </button>
-                    </li>
-                </ul>
-            </li>
-            <li class="menu-btn add-list-btn">
-                <button class="no-styling list-add-btn">
-                    <i class="fas fa-plus add-list-plus-icon"></i></i>Add List
-                </button>
-            </li>
-        </ul>
-        <div class="wrapper-for-large-screens">
-            <div class="todo-list-wrapper">
-                <div class="column-names">
-                    <h2 class="list-column-name">Chores</h2>
-                    <h2 class="due-date-column-name">Due Date</h2>
-                </div>
-                <ul class="the-task-items">
-                </ul>
-            </div>
-            <div class="new-task-editor hidden">
-                <form action="" method="get" class="task-editor-form">
-                    <input class="task-field" name="task" type="text" placeholder="Task" />
-                    <textarea class="description-field" name="description" placeholder="Details">
-                    </textarea>
-                    <div class="datepicker-addbutton">
-                        <input class="date-picker" name="due-date" type="date" />
-                        <button class="cancel-new-task-btn">
-                            <i class="far fa-times-circle cancel-new-task-icon">
-                            </i>
-                        </button>
-                        <button class="new-task-submit-btn">
-                            <i class="far fa-check-circle new-task-checkmark"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <button class="new-task-btn">
-                <i class="fas fa-plus new-task-plus"></i>Add Task
+    <div class="firebaseui-wrapper">
+        <h1 class="app-title-for-firebaseui">To-Do</h1>
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+    </div>
+    <div class="app-wrapper">
+        <header>
+            <h1 class="app-title"><i class="fas fa-check-circle"></i>To-Do..</h1>
+            <button class="toggle-menu-btn">
+                <i class="fas fa-grip-horizontal toggle-menu-btn-icon"></i>
             </button>
-        </div>
-    </main>
-    <footer>
-        <span class="copyright">Copyright © 2021 mattdimicelli</span>
-        <a class="github-link" href="https://github.com/mattdimicelli" target="_blank">
-            <i class="fab fa-github-square"></i>
-        </a>
-    </footer>
+        </header>
+        <main class="main">
+            <ul class="menu">
+                <li class="menu-btn all">
+                    <button class="no-styling all">
+                        <i class="fas fa-globe all-icon"></i>View All
+                    </button>
+                </li>
+                <li class="menu-btn today">
+                    <button class="no-styling day">
+                        <i class="fas fa-calendar-day day-icon"></i>Today
+                    </button>
+                </li>
+                <li class="menu-btn week">
+                    <button class="no-styling week">
+                        <i class="fas fa-calendar-week week-icon"></i>Week
+                    </button></li>
+                <li class="list-label">Lists
+                    <ul class="ul-list-of-lists">
+                        <li class="list-menu-btn">
+                            <button class="no-styling menu-list">
+                                <span class="list-icon-and-text">
+                                    <i class="fas fa-list-alt list-menu-icon"></i>
+                                    <span class="list-name-text">Chores</span>
+                                </span>
+                                    <i class="fas fa-edit edit-list-graphic"></i>
+                                    <!-- This is not semantically perfect because
+                                         this edit-list-graphic should be a button,
+                                          but cannot nest a button inside a button. 
+                                           Todo: improve -->
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-btn add-list-btn">
+                    <button class="no-styling list-add-btn">
+                        <i class="fas fa-plus add-list-plus-icon"></i></i>Add List
+                    </button>
+                </li>
+                <li>
+                    <button class="log-out-btn">Log Out</button>
+                </li>
+            </ul>
+            <div class="wrapper-for-large-screens">
+                <div class="todo-list-wrapper">
+                    <div class="column-names">
+                        <h2 class="list-column-name">Chores</h2>
+                        <h2 class="due-date-column-name">Due Date</h2>
+                    </div>
+                    <ul class="the-task-items">
+                    </ul>
+                </div>
+                <div class="new-task-editor hidden">
+                    <form action="" method="get" class="task-editor-form">
+                        <input class="task-field" name="task" type="text" placeholder="Task" />
+                        <textarea class="description-field" name="description" placeholder="Details">
+                        </textarea>
+                        <div class="datepicker-addbutton">
+                            <input class="date-picker" name="due-date" type="date" />
+                            <button class="cancel-new-task-btn">
+                                <i class="far fa-times-circle cancel-new-task-icon">
+                                </i>
+                            </button>
+                            <button class="new-task-submit-btn">
+                                <i class="far fa-check-circle new-task-checkmark"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <button class="new-task-btn">
+                    <i class="fas fa-plus new-task-plus"></i>Add Task
+                </button>
+            </div>
+        </main>
+        <footer>
+            <span class="copyright">Copyright © 2021 mattdimicelli</span>
+            <a class="github-link" href="https://github.com/mattdimicelli" target="_blank">
+                <i class="fab fa-github-square"></i>
+            </a>
+        </footer>
+    </div>
 </body>
 
 </html>
