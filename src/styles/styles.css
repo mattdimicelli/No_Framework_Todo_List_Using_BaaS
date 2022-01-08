@@ -29,6 +29,10 @@ ul  {
 footer {
 	background-color: var(--main-dark-color);
 	color: white;
+	align-items: center;
+	display: flex;
+	height: 5vh;
+	justify-content: center;
 }
 
 header {
@@ -55,7 +59,8 @@ button.no-styling {
 button:hover,
 .menu-btn:hover,
 .list-menu-btn:hover,
-.toggle-menu-btn:hover {
+.toggle-menu-btn:hover,
+.todo-item {
 	cursor: pointer;
 }
 
@@ -68,7 +73,23 @@ button:hover,
 	background-color: var(--secondary-light-color);
 }
 
+.menu-btn:hover,
+.list-menu-btn:hover {
+	background-color: var(--middle-color);
+}
+
 /* Pseudoclass */
+
+.description-field:focus, .task-field:focus {
+	outline: none;
+}
+
+.github-link:link,
+.github-link:visited {
+	color: white;
+	font-size: 2rem;
+}
+
 
 .menu > li:first-of-type {
 }
@@ -78,19 +99,12 @@ button:hover,
 
 /* Class selectors */
 
-.no-styling.delete-list-trashcan,
-.no-styling.cancel-edit-list-button,
-.no-styling.submit-edit-list-button {
-}
-
-.no-styling.menu-list{
-}
-
-.menu .fas {
-}
 
 .menu-btn,
 .list-menu-btn {
+	padding: 0.5rem;
+	margin-right: 0.5rem;
+	border-radius: 5px;
 }
 
 .task-editor,
@@ -100,41 +114,64 @@ button:hover,
 }
 
 .task-delete-btn,
-.cancel-new-task-btn {
-}
-
-.task-delete-btn,
 .edit-task-submit-btn,
 .cancel-new-task-btn,
 .new-task-submit-btn,
 .edit-task-btn,
-.task-edit-btn,
-.edit-list-graphic {
+.edit-list-graphic,
+.show-task-details-btn {
 	padding: 5px;
 }
 
-.edit-task-submit-btn,
-.new-task-submit-btn {
+.all-icon,
+.day-icon,
+.week-icon,
+.list-menu-icon,
+.add-list-plus-icon,
+.log-out-icon {
+	margin-right: 0.5rem;
 }
+
+.description-field, .task-field {
+	border: 0;
+}
+
+.todo-item,
+.new-task-btn { 
+	width: 98%;
+}
+
+
 
 .app-title {
 	font-size: 3rem;
+}
+
+
+.column-names {
+	display: flex;
+	justify-content: space-around;
+}
+
+
+.date-and-btns {
+	white-space: nowrap;
+}
+
+.description-field {
+	width: 100%;
+	height: 100px;
+	resize: none;
 }
 
 .details {
 	font-weight: normal;
 }
 
-.column-names {
-}
 
-.copyright {
-}
-
-.date-and-btns {
-}
-
-.edit-task-btn {
+.github-link {
+	color: white;
+	font-size: 2rem;
 }
 
 .list-label {
@@ -143,103 +180,81 @@ button:hover,
 	font-weight: bold;
 }
 
+.list-label-text {
+	margin-left: 0.5rem;
+}
+
 .list-menu-btn {
 	font-size: 1rem;
 	font-weight: normal;
 }
 
-.main {
+
+.log-out-btn {
+	display: flex;
+	align-items: center;
+	padding: 0;
 }
+
+.log-out-btn-text {
+	text-align: start;
+}
+
 
 .menu {
 	background-color: var(--secondary-light-color);
 	display: none;
-}
-
-.menu-btn {
-}
-
-.task {
-	display: block;
-	margin-left: 1rem;
-	font-weight: bold;
-}
-
-.task-date-btns {
-}
-
-.todo-item {
-}
-
-.toggle-menu-btn {
-}
-
-.date-picker {
-}
-
-.description-field, .task-field {
-	border: 0;
-}
-
-.description-field:focus, .task-field:focus {
-	outline: none;
-}
-
-.description-field {
-	height: 100px;
-	resize: none;
-}
-
-.edit-task-submit-btn, 
-.cancel-task-submission-btn {
-}
-
-.datepicker-addbutton{
-
-}
-
-.github-link,
-.github-link:link,
-.github-link:visited {
-	color: white;
-	font-size: 2rem;
-}
-
-.menu-btn:hover,
-.list-menu-btn:hover {
-	background-color: var(--middle-color);
-}
-
-.fa-plus{
-}
-
-.new-list-cancel-btn {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 .new-task-btn {
-
-	
+	padding: 5px;
+	border-radius: 5px;
+	width: auto;
 }
 
-.new-list-text-input {
+.no-styling.menu-list {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
+.task {
+	font-weight: bold;
+}
+
+.task-field {
+	width: 100%;
+}
+
+.task-date-btns {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 0;
+}
+
+.the-task-items {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 0;
+}
+
+.wrapper-for-large-screens {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 20px;
+}
 
 
 @media only screen and (min-width: 900px) {
-	.menu {
 
-	}
-
-	.main {
-
-	}
-
-	.todo-list-wrapper {
-	}
-
-	.new-task-btn {
-	}
 }
 
 

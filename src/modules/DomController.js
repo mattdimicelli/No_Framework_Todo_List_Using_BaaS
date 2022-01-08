@@ -1,5 +1,6 @@
 import logic from './Logic';
-import { loadToDoListDataFromFirestore } from './Firebase.js';
+import { signOut } from 'firebase/auth';
+
 
 
 class DomController {
@@ -10,12 +11,17 @@ class DomController {
         this.taskCurrentlyBeingEdited = false;
     }
 
-    initializeEventListeners() {
+    initializeEventListeners(auth) {
         document.addEventListener('click', this.handleClick.bind(this));
-        document.addEventListener('DOMContentLoaded', loadToDoListDataFromFirestore);
         const textInput = document.querySelectorAll('input[type="text"]');
         textInput.forEach(textInput => {
             textInput.addEventListener('keydown', this.textInputKeydownHandler);
+        });
+        let logOutBtn = document.querySelector('.log-out-btn');
+        logOutBtn.addEventListener('click', () => {
+          signOut(auth);
+          // the log out button gets it's own event listener bc it is passed
+          // the auth argument
         });
     }
 
@@ -466,7 +472,7 @@ class DomController {
     taskSubmitBtnHandler(target) {
         const taskEditorForm = target.closest('.task-editor-form');
         const taskName = taskEditorForm.children[0].value;
-        const details = taskEditorForm.children[1].value;
+        const details = taskEditorForm.children[1].value.trim();
         const dueDate = taskEditorForm.children[2].firstElementChild.valueAsDate;
 
         if(!this.dueDateIsValid(dueDate)){
@@ -533,6 +539,33 @@ class DomController {
         this.renderTasks();
         this.updateColumnName();
     }
+
+    hideFirebaseUI() {
+        let firebaseUIWrapper = document.querySelector('.firebaseui-wrapper');
+        firebaseUIWrapper.classList.add('hidden');
+      }
+      
+    showFirebaseUI() {
+        let firebaseUIWrapper = document.querySelector('.firebaseui-wrapper');
+        firebaseUIWrapper.classList.remove('hidden');
+      }
+      
+    hideToDoApp() {
+        let appWrapper = document.querySelector('.app-wrapper');
+        appWrapper.classList.add('hidden');
+      }
+      
+    showToDoApp() {
+        let appWrapper = document.querySelector('.app-wrapper');
+        appWrapper.classList.remove('hidden');
+    }
+
+    showCurrentUsersNameOnLogOutBtn(userDisplayName) {
+        let logOutBtn = document.querySelector('.log-out-btn-text');
+        logOutBtn.insertAdjacentHTML('beforeend', 
+        `<div class="user-display-name">${userDisplayName}</div>`);
+    }
+      
 }
 
 export default new DomController();

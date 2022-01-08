@@ -40,7 +40,8 @@
                     <button class="no-styling week">
                         <i class="fas fa-calendar-week week-icon"></i>Week
                     </button></li>
-                <li class="list-label">Lists
+                <li class="list-label">
+                    <span class="list-label-text">Lists</span>
                     <ul class="ul-list-of-lists">
                         <li class="list-menu-btn">
                             <button class="no-styling menu-list">
@@ -62,8 +63,11 @@
                         <i class="fas fa-plus add-list-plus-icon"></i></i>Add List
                     </button>
                 </li>
-                <li>
-                    <button class="log-out-btn">Log Out</button>
+                <li class="menu-btn">
+                    <button class="log-out-btn">
+                        <i class="fas fa-sign-out-alt log-out-icon"></i>
+                        <div class="log-out-btn-text">Log Out</div>
+                    </button>
                 </li>
             </ul>
             <div class="wrapper-for-large-screens">
@@ -78,8 +82,7 @@
                 <div class="new-task-editor hidden">
                     <form action="" method="get" class="task-editor-form">
                         <input class="task-field" name="task" type="text" placeholder="Task" />
-                        <textarea class="description-field" name="description" placeholder="Details">
-                        </textarea>
+                        <textarea class="description-field" name="description" placeholder="Details"></textarea>
                         <div class="datepicker-addbutton">
                             <input class="date-picker" name="due-date" type="date" />
                             <button class="cancel-new-task-btn">

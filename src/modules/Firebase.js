@@ -3,11 +3,10 @@ import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 import 'firebase/compat/auth';
 import firebaseConfig from './FirebaseConfig.js';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, enableIndexedDbPersistence, getDoc } from "firebase/firestore";
 import domController from './DomController';
 import logic from './Logic';
-
 
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -16,6 +15,7 @@ const app = firebase.initializeApp(firebaseConfig);
 
 const auth = getAuth();
 let userId;
+let userDisplayName;
 
 onAuthStateChanged(auth, user => {
   if (user) {
@@ -23,14 +23,17 @@ onAuthStateChanged(auth, user => {
     const { uid, displayName } = user;
     console.log(displayName);
     userId = uid;
-    domController.initializeEventListeners();
-    hideFirebaseUI();
-    showToDoApp();
+    userDisplayName = displayName;
+    domController.initializeEventListeners(auth);
+    loadToDoListDataFromFirestore();
+    domController.hideFirebaseUI();
+    domController.showToDoApp();
+    domController.showCurrentUsersNameOnLogOutBtn(displayName);
   } else {
     // user is signed out
     startFirebaseUI();
-    showFirebaseUI();
-    hideToDoApp();
+    domController.showFirebaseUI();
+    domController.hideToDoApp();
   }
 });
 
@@ -74,28 +77,6 @@ function startFirebaseUI() {
   });  
 }
 
-function hideFirebaseUI() {
-  let firebaseUIWrapper = document.querySelector('.firebaseui-wrapper');
-  firebaseUIWrapper.classList.add('hidden');
-}
-
-function showFirebaseUI() {
-  let firebaseUIWrapper = document.querySelector('.firebaseui-wrapper');
-  firebaseUIWrapper.classList.remove('hidden');
-}
-
-function hideToDoApp() {
-  let appWrapper = document.querySelector('.app-wrapper');
-  appWrapper.classList.add('hidden');
-}
-
-function showToDoApp() {
-  let appWrapper = document.querySelector('.app-wrapper');
-  appWrapper.classList.remove('hidden');
-  document.querySelector('.log-out-btn').addEventListener('click', () => {
-    signOut(auth);
-  });
-}
 
 
 const db = getFirestore();
