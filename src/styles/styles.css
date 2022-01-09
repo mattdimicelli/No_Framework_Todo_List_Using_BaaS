@@ -43,7 +43,7 @@ header {
 	justify-content: space-between;
 	padding-left: 1rem;
 	padding-right: 1rem;
-	
+	height: 21vh;
 
 }
 
@@ -99,6 +99,9 @@ button:hover,
 
 /* Class selectors */
 
+.fab.fa-github-square {
+	margin-left: 1rem;
+}
 
 .menu-btn,
 .list-menu-btn {
@@ -136,9 +139,14 @@ button:hover,
 	border: 0;
 }
 
-.todo-item,
-.new-task-btn { 
-	width: 98%;
+.new-task-editor,
+.task-editor {
+	border-radius: 0.5rem;
+	padding: 1rem;
+}
+
+.todo-item { 
+	width: 96%;
 }
 
 
@@ -158,6 +166,11 @@ button:hover,
 	white-space: nowrap;
 }
 
+.datepicker-addbutton {
+	display: flex;
+	justify-content: space-between;
+}
+
 .description-field {
 	width: 100%;
 	height: 100px;
@@ -166,6 +179,11 @@ button:hover,
 
 .details {
 	font-weight: normal;
+
+	/* these two declarations are in case the details are really long, so that 
+	they wrap */
+	max-width: 50vw;
+	overflow-wrap: break-word;
 }
 
 
@@ -200,6 +218,10 @@ button:hover,
 	text-align: start;
 }
 
+.main {
+	height: 73vh;
+	overflow: auto;
+}
 
 .menu {
 	background-color: var(--secondary-light-color);
@@ -214,6 +236,12 @@ button:hover,
 	padding: 5px;
 	border-radius: 5px;
 	width: auto;
+	margin-top: 1rem;
+}
+
+
+.new-task-editor {
+	margin: 0.5rem 0.5rem 0 0.5rem;
 }
 
 .no-styling.menu-list {
@@ -225,6 +253,11 @@ button:hover,
 
 .task {
 	font-weight: bold;
+}
+
+.task-editor {
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .task-field {
@@ -245,6 +278,10 @@ button:hover,
 	margin-bottom: 0;
 }
 
+.two-buttons-container {
+	display: inline-block;
+}
+
 .wrapper-for-large-screens {
 	display: flex;
 	flex-direction: column;
@@ -252,9 +289,31 @@ button:hover,
 	padding-bottom: 20px;
 }
 
+@media only screen and (min-width: 600px) {
+	.todo-list-wrapper {
+		width: 92%;
+	}
+	.new-task-editor {
+		width: 88%;
+		box-sizing: border-box;
+		height: auto;
+	}
+}
+
 
 @media only screen and (min-width: 900px) {
+	.menu {
+		float: left;
+		width: 28%;
+		height: 150vh;
+		max-width: 320px;
+	}
+}
 
+@media only screen and (min-width: 1150px) {
+	.column-names {
+		justify-content: space-between;
+	}
 }
 
 
