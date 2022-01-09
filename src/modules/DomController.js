@@ -572,4 +572,3 @@ export default new DomController();
 
 
 
-//issues.  can't get task name to wrap at 50%;
