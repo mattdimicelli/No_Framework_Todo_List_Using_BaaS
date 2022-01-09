@@ -154,6 +154,7 @@ button:hover,
 .column-names {
 	display: flex;
 	justify-content: space-around;
+	min-width: 240px;
 }
 
 
@@ -223,7 +224,7 @@ button:hover,
 }
 
 .main {
-	height: 73vh;
+	height: 74vh;
 	overflow: auto;
 }
 
