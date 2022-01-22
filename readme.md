@@ -53,7 +53,7 @@ extensive patience as I attempted to follow less-than-stellar documentation.
 
 Since this was my first project utilizing backend services, I learned the basics
 of how user authentication works and how to add Google, Github, and email 
-authentication provider functionality to my app.  I always contemplated and 
+authentication provider functionality to my app.  I contemplated and 
 implemented the transformations to my local data necessary to save them to the 
 Firestore database, and vice-versa.  
 
