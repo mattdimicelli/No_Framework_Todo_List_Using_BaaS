@@ -57,10 +57,9 @@ authentication provider functionality to my app.  I contemplated and
 implemented the transformations to my local data necessary to save them to the 
 Firestore database, and vice-versa.  
 
-One option for my that I enabled which I though was particularly cool is called
+One option that enabled in the database configuration which I though was particularly cool is called
 "database persistence", which essentially replicates the functionality of 
 localStorage, since it uses a cached version of the data from the online Firestore database (if there is in fact data in the database) when the internet connection
-is dropped, and it updates the Firestore database once and internet connection is reestablished.
-
+is dropped, and it updates the Firestore database once and internet connection is reestablished.  So, this app preserves all of the functionality that the original, backend-less app had.
 
 
