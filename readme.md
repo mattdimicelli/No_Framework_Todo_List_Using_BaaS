@@ -1,15 +1,6 @@
 # Readme
 # ToDo App
 
-## Table of contents
-  - [Overview](#overview)
-    - [Screenshot](#screenshot)
-    - [Links](#links)
-  - [My process](#my-process)
-    - [Built with](#built-with)
-    - [What I learned](#what-i-learned)
-
-
 ## Overview
 
 A ToDo app which allows the user to keep track of his or her "things to do", 
@@ -24,7 +15,9 @@ Firestore database and Authentication.
 
 ### Screenshot
 
-![](./screenshot_for_readme.png)
+<p align="center">
+  <img src="./screenshot_for_readme.png" alt="screenshot of ToDo app" width="45%" height="45%">
+</p>
 
 ### Links
 
