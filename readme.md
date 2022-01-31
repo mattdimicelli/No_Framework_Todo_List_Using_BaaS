@@ -22,7 +22,7 @@ Firestore database and Authentication.
 ### Links
 
 - [Live site](https://todo-app-e225d.web.app/)
-- [Repo](https://github.com/mattdimicelli/todo-firebase)
+- [Repo](https://github.com/mattdimicelli/No_Framework_Todo_List_Using_BaaS)
 
 ## My process
 
